@@ -1,0 +1,29 @@
+{
+    "name": "bnowack/polymorph",
+    "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Benjamin Nowack",
+            "email": "mail@bnowack.de"
+        }
+    ],
+    "require": {},
+	"require-dev": {
+		"behat/behat": "3.1.0rc2",
+		"emuse/behat-html-formatter": "0.1.*",
+		"behat/mink": "1.6.0",
+		"behat/mink-goutte-driver": "1.2.0",
+		"behat/mink-extension": "2.1.0",
+		"behat/mink-selenium2-driver": "1.2.0",
+		"phpspec/phpspec": "2.4.0",
+		"phpunit/phpunit": "4.8.24",
+		"ext-xdebug": ">=2.2.1",
+		"henrikbjorn/phpspec-code-coverage": "1.0.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"": "src/"
+		}
+	}
+}
