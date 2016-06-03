@@ -1,0 +1,7 @@
+/bower_components
+/data
+/dev/reports
+/nbproject
+/node_modules
+/vendor
+.DS_Store
