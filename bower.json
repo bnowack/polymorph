@@ -19,7 +19,9 @@
 		"node_modules",
 		"bower_components",
 		"dev",
-		"vendor"
+		"vendor",
+		"composer.*",
+		"**/*.php"
 	],
 	"dependencies": {
 		"jquery": "^2.2.0",
