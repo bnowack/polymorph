@@ -8,7 +8,10 @@
       "email": "mail@bnowack.de"
     }
   ],
-  "require": {},
+  "require": {
+    "silex/silex": "^2.0.0",
+    "twig/twig": "^1.24.0"
+  },
   "require-dev": {
     "phpspec/phpspec": "2.4.0",
     "phpunit/phpunit": "4.8.24",
