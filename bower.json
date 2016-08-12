@@ -24,7 +24,6 @@
 		"**/*.php"
 	],
 	"dependencies": {
-		"jquery": "^2.2.0",
 		"polymer": "^1.5.0"
 	}
 
