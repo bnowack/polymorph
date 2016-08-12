@@ -17,7 +17,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Polymorph\\": "src/"
+      "Polymorph\\": "src/Polymorph",
+      "spec\\Polymorph": "src/Polymorph"
     }
   }
 } 
