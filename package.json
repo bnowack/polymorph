@@ -1,0 +1,41 @@
+{
+  "name": "polymorph",
+  "version": "0.0.1",
+  "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
+  "scripts": {
+    "npm-fresh": "rm -rf ./node_modules && npm install",
+    "bower-fresh": "rm -rf ./bower_components && bower install",
+    "php-serve": "php -S 0.0.0.0:8888 -t ./ dev/e2e/config/php-router.php",
+    "test-e2e": "./node_modules/.bin/karma start dev/e2e/config/karma.conf.js",
+    "test-js": "./node_modules/.bin/karma start dev/js-specs/config/karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bnowack/polymorph.git"
+  },
+  "keywords": [
+    "polymer",
+    "php",
+    "webcomponents"
+  ],
+  "author": "Benjamin Nowack <mail@bnowack.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bnowack/polymorph/issues"
+  },
+  "homepage": "https://github.com/bnowack/polymorph",
+  "devDependencies": {
+    "jquery": "*",
+    "bower": "^1.7.9",
+    "cucumber": "1.*",
+    "karma": "*",
+    "karma-chrome-launcher": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
+    "karma-junit-reporter": "^1.0.0",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "phantomjs-prebuilt": "^2.1.7",
+    "karma-coverage": "^1.1.0",
+    "karma-cukes": "1.*",
+    "polymer-cli": "^0.12.0"
+  }
+}
