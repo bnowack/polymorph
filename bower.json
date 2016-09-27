@@ -1,13 +1,14 @@
 {
   "name": "polymorph",
   "homepage": "https://github.com/bnowack/polymorph",
+  "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
   "authors": [
     "Benjamin Nowack <mail@bnowack.de>"
   ],
-  "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
   "keywords": [
     "polymer",
-    "php"
+    "php",
+    "webcomponents"
   ],
   "license": "MIT",
   "repository": {
@@ -24,6 +25,10 @@
     "**/*.php"
   ],
   "dependencies": {
-    "polymer": "^1.5.0"
+    "polymer": "Polymer/polymer#^1.*"
+  },
+  "devDependencies": {
+    "polymorph": "bnowack/polymorph#0.*",
+    "living-cukes": "bnowack/living-cukes#*"
   }
 }
