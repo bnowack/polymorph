@@ -9,14 +9,14 @@
     }
   ],
   "require": {
-    "silex/silex": "^2.0.0",
-    "twig/twig": "^1.24.0"
+    "silex/silex": "2.*",
+    "twig/twig": "1.*"
   },
   "require-dev": {
-    "phpspec/phpspec": "2.4.0",
-    "phpunit/phpunit": "4.8.24",
-    "ext-xdebug": ">=2.2.1",
-    "henrikbjorn/phpspec-code-coverage": "1.0.1"
+    "phpspec/phpspec": "2.*",
+    "phpunit/phpunit": "4.*",
+    "ext-xdebug": "2.*",
+    "henrikbjorn/phpspec-code-coverage": "1.*"
   },
   "autoload": {
     "psr-4": {
