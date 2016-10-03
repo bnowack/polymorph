@@ -1,0 +1,15 @@
+bootstrap: dev/php-specs/config/bootstrap.php
+formatter.name: pretty
+extensions:
+    - PhpSpec\Extension\CodeCoverageExtension
+suites:
+    default:
+        src_path: src
+        spec_prefix: src
+code_coverage:
+    format:
+        - html
+        - clover
+    output:
+        html: dev/php-specs/reports/coverage
+        clover: dev/php-specs/reports/coverage/coverage.xml

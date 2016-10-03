@@ -1,7 +1,7 @@
 /.idea
 /bower_components
 /data
-/dev/reports
+/dev/**/reports
 /nbproject
 /node_modules
 /vendor
