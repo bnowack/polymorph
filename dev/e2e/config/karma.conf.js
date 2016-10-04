@@ -6,7 +6,8 @@ module.exports = function(config) {
         files: [
             { pattern: 'src/Polymorph/Application/**/*.feature', included: false, watched: true, served: true },
             { pattern: 'dev/e2e/config/hooks.js', included: true, watched: true, served: true },
-            { pattern: 'dev/e2e/config/step-definitions.js', included: true, watched: true, served: true }
+            { pattern: 'dev/e2e/config/step-definitions.js', included: true, watched: true, served: true },
+            { pattern: 'src/**/*.html', included: false, watched: true, served: true }
         ],
         client: {
             args: process.argv.slice(4),
@@ -35,7 +36,7 @@ module.exports = function(config) {
         proxies: {
             "/": "http://localhost:8888/"
         },
-        browsers: ['PhantomJS'],
+        browsers: ['PhantomJS2'],
         autoWatch: true,
         singleRun: false
     });
