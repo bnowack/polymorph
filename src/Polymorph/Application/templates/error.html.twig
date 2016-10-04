@@ -1,0 +1,36 @@
+
+{% extends baseTemplate %}
+
+{% block imports %}
+
+    {{ parent() }}
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Page/elements/polymorph-page.html"/>
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-exception.html"/>
+
+{% endblock %}
+
+{% block view %}
+
+    <polymorph-page class="polymorph-partial" path="{{ view.path }}">
+
+        {% for exception in exceptions %}
+
+            <polymorph-app-exception code="{{exception.statusCode}}" message='{{exception.message}}'>
+                <ul class="trace">
+
+                {% for entry in exception.trace %}
+                    {% if entry.line %}
+
+                        <li>in <span class="file">{{entry.file}}</span> line <span class="line">{{entry.line}}</span></li>
+
+                    {% endif %}
+                {% endfor %}
+
+                </ul>
+            </polymorph-app-exception>
+
+        {% endfor %}
+
+    </polymorph-page>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+
+<meta name="robots" content="{{ meta.robots }}"/>
+<meta name="description" content="{{ meta.description }}"/>
+<meta name="viewport" content="{{ meta.viewport }}"/>
+
+<title data-suffix="{{ meta.titleSuffix }}">{{ pageTitle }}{{ meta.titleSuffix }}</title>
+
+{% block imports %}
+
+<link rel="import" href="bower_components/polymer/polymer.html"/>
+<link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/shared-styles.html"/>
+<link rel="import" href="bower_components/polymorph/src/Polymorph/Page/elements/polymorph-page.html"/>
+
+{% endblock %}
+
+{% block view %}
+    <polymorph-page class="polymorph-partial" path="{{ view.path }}">
+        {{ content|raw }}
+    </polymorph-page>
+{% endblock %}

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="{{ meta.language }}">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="robots" content="{{ meta.robots }}"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="description" content="{{ meta.description }}"/>
+    <meta name="viewport" content="{{ meta.viewport }}"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <meta name="og:site_name" content="{{ meta.name }}"/>
+    <meta name="og:title" content="{{ pageTitle }}"/>
+    <meta name="og:type" content="{{ meta.type }}"/>
+    <meta name="og:image" content="{{ icons.facebook }}"/>
+
+    <base href="{{ base }}"/>
+
+    <link rel="shortcut icon" href="{{ icons.browser }}" data-size="32x32"/>
+    <link rel="apple-touch-icon" href="{{ icons.app }}" data-size="152x152"/>
+    <link rel="manifest" href="{{ base }}manifest.json"/>
+
+    <title data-suffix="{{ meta.titleSuffix }}">{{ pageTitle }}{{ meta.titleSuffix }}</title>
+
+    <style>
+        {% block style %}
+
+        {{ resetCss }}
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        body.initializing  {
+            background: #fff url("{{ icons.browser }}") center no-repeat;
+        }
+
+        body.initializing > * {
+            display: none;
+        }
+
+        {% endblock %}
+
+    </style>
+
+    <script type="text/javascript">
+        {% block script %}
+
+        window.base = "{{ base }}";
+
+        window.Polymorph = {
+            base: "{{ base }}",
+            activeView: "{{ view.path }}"
+        };
+
+        // set up Polymer options
+        window.Polymer = {
+            lazyRegister: true,
+            dom: 'shadow'
+        };
+
+        // inject polyfill, if needed
+        var hasWebComponents = 'registerElement' in document
+                && 'import' in document.createElement('link')
+                && 'content' in document.createElement('template');
+
+        if (!hasWebComponents) {
+            var script = document.createElement('script');
+            script.src = 'bower_components/webcomponentsjs/webcomponents-lite.min.js';
+            document.head.appendChild(script);
+        }
+
+        {% endblock %}
+
+    </script>
+
+    {% block imports %}
+
+    <link rel="import" href="bower_components/polymer/polymer.html"/>
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/shared-styles.html"/>
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app.html"/>
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-header.html"/>
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-canvas.html"/>
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-footer.html"/>
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Page/elements/polymorph-page.html"/>
+
+    {% endblock %}
+</head>
+<body class="initializing">
+    {% block body %}
+        <polymorph-app>
+
+            {% block header %}
+                <polymorph-app-header base="{{ base }}"></polymorph-app-header>
+            {% endblock %}
+
+            {% block canvas %}
+                <polymorph-app-canvas>
+
+                    {% block view %}
+                        <polymorph-page class="polymorph-partial" path="{{ view.path }}">
+                            {{ content|raw }}
+                        </polymorph-page>
+                    {% endblock %}
+
+                </polymorph-app-canvas>
+            {% endblock %}
+
+            {% block footer %}
+                <polymorph-app-footer></polymorph-app-footer>
+            {% endblock %}
+
+        </polymorph-app>
+    {% endblock %}
+</body>
+</html>
+
+
