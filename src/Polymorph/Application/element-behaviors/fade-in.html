@@ -1,0 +1,19 @@
+<!-- fade-in -->
+
+<script>
+    polymorphFadeIn = {
+
+        created: function () {
+            this.style.opacity = 0;
+            this.style.webkitTransition = this.style.transition = 'opacity 0.5s';
+        },
+
+        attached: function () {
+            var self = this;
+            setTimeout(function () {
+                self.style.opacity = 1;
+            }, 250);
+        }
+
+    }
+</script>
