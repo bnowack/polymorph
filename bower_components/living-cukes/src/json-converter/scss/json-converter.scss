@@ -1,0 +1,152 @@
+
+@import "../../app/scss/_theme.scss";
+
+
+.doc.json {
+    
+    font-size: 18px;
+    
+    &:after {
+        content: "";
+        display: block;
+        clear: both;
+    }            
+    
+    // shared styles
+    
+    ul {
+        padding-left: 0;
+        
+        > li {
+            list-style-type: none;
+            position: relative;
+            
+            &:after {
+                content: "";
+                display: block;
+                clear: both;
+            }            
+            
+            .heading {
+                display: inline-block;
+                vertical-align: top;
+                line-height: 24px;
+                margin: 0;
+                font-weight: normal;
+                
+                &:before {
+                    content: attr(data-keyword);
+                }
+            }
+    
+            // heading colors
+            
+            &.complete > .heading:before {
+                color: $passed-color;
+            }
+
+            &.incomplete > .heading:before {
+                color: $incomplete-color;
+            }
+
+            &.failed > .heading:before {
+                color: $failed-color;
+            }
+            
+            // stats
+
+            .stats {
+                
+                float: right;
+                display: inline-block;
+                font-size: 0.8em;
+                vertical-align: top;
+
+                span {
+                    margin-left: 1px;
+                    padding: 2px 4px;
+                    background-color: #f9f9f9;
+                    line-height: 1.5rem;
+                    border-radius: 2px;
+                    color: #fff;
+
+                    &.complete {
+                        background-color: $passed-color;
+                    }
+
+                    &.incomplete {
+                        background-color: $incomplete-color;
+                    }
+
+                    &.failed {
+                        background-color: $failed-color;
+                    }
+                    
+                    &[data-value="0"] {
+                        display: none;
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    // features
+    
+    ul.features {
+        
+        > li {
+            padding-bottom: 20px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #eee;
+            
+            > .stats {
+                margin-right: 8px;// align with padded scenario stats
+            }
+        }
+        
+    }
+    
+    // scenarios
+    
+    ul.scenarios {
+        
+        li.scenario {
+            background-color: #f9f9f9;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 2px;
+        }
+        
+    }
+    
+    // steps
+    
+    ul.steps {
+        
+        font-size: 0.9em;
+        margin-top: 4px;
+
+        li.step {
+            
+            background-color: #fff;
+            padding: 2px 8px;
+            margin-bottom: 1px;
+            
+            .heading {
+                vertical-align: middle;
+            }
+            
+            &.failed .message {
+                color: #000;
+                font-size: 0.8em;
+                line-height: 1.5em;
+                margin: 0.5em 0.5em 0.5em 3em;
+                padding-left: 1em;
+                border-left: 2px solid #f50057;
+            }
+
+        }
+    }
+
+}

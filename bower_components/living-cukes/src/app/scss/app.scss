@@ -1,0 +1,75 @@
+
+@import "../../../bower_components/roboto-fontface/css/roboto/sass/roboto-fontface-regular.scss";
+@import "../../../bower_components/roboto-fontface/css/roboto/sass/roboto-fontface-light.scss";
+@import "../../../bower_components/roboto-fontface/css/roboto/sass/roboto-fontface-medium.scss";
+@import "_theme.scss";
+
+body {
+    background-color: $body-bg-color;
+    font-family: "Roboto-Light", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    word-wrap: break-word;    
+}
+
+html * {
+    box-sizing: border-box;
+}
+
+a {
+    color: $gray-1;
+    font-family: "Roboto";
+}
+
+h2 {
+	padding-bottom: 0.3em;
+	font-size: 1.75em;
+	line-height: 1.225;
+	border-bottom: 1px solid #eee; 
+}
+
+section.doc {
+    display: none;
+
+    > a.source {
+        display: inline-block;
+        font-size: 0.8em;
+        float: right
+    }
+
+    img {
+        max-width : 100%;
+    }
+
+    img[alt="design"] {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .design-nav {
+        text-align: right;
+        font-size: 0.8em;
+    }
+
+    .design-nav a + a {
+        margin-left: 10px;
+    }
+
+}
+
+code {
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
+    padding: 0;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    margin: 0;
+    font-size: 85%;
+    background-color: rgba(0,0,0,0.04);
+    border-radius: 3px;
+}
+
+pre {
+    margin-top: 0;
+    margin-bottom: 0;
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}

@@ -1,0 +1,36 @@
+
+@import "../../app/scss/_theme.scss";
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+body > .container {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;    
+    
+    #content {
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        background-color: $content-bg-color;
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+        padding: $header-height 32px 32px;
+    }
+    
+    #annotations {
+        width: 36px;
+    }
+}
+

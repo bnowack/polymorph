@@ -1,0 +1,68 @@
+#nav {
+  width: 264px;
+  margin: 100px 16px 100px 0;
+}
+#nav > ul {
+  position: fixed;
+  width: 264px;
+  list-style-type: none;
+  padding: 0 20px 0 0;
+  overflow: auto;
+  top: 100px;
+  bottom: 50px;
+}
+#nav > ul > li {
+  line-height: 2;
+  padding: 3px 8px 5px 8px;
+  border-radius: 4px;
+}
+#nav > ul > li a {
+  font-family: "Roboto-Light";
+  text-decoration: none;
+}
+#nav > ul > li.active, #nav > ul > li.active.first {
+  background-color: #fff;
+}
+#nav > ul > li.active a, #nav > ul > li.active.first a {
+  font-family: "Roboto";
+}
+#nav > ul > li.first {
+  background-color: #eee;
+}
+#nav > ul > li:before {
+  -display: inline-block;
+  -width: 30px;
+  -content: attr(data-section);
+}
+#nav > ul > li.h2 {
+  margin: 8px 0;
+  font-size: 1.1em;
+}
+#nav > ul > li.h2:first-child {
+  margin-top: 0;
+}
+#nav > ul > li.h3 {
+  font-size: 0.9em;
+  line-height: 1.5;
+  margin: 4px 0;
+  padding-left: 20px;
+}
+#nav > footer {
+  position: fixed;
+  width: 244px;
+  text-align: right;
+  bottom: 8px;
+  padding: 8px 0 0 0;
+  font-size: 12px;
+  color: #bbb;
+  border-top: 1px solid #ddd;
+}
+#nav > footer a {
+  padding-left: 16px;
+  background: transparent url("../../app/img/favicon.png") 0 2px no-repeat;
+  background-size: 14px 14px;
+  color: #777;
+  text-decoration: none;
+}
+
+/*# sourceMappingURL=nav.css.map */

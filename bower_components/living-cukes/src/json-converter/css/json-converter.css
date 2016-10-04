@@ -1,0 +1,101 @@
+.doc.json {
+  font-size: 18px;
+}
+.doc.json:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.doc.json ul {
+  padding-left: 0;
+}
+.doc.json ul > li {
+  list-style-type: none;
+  position: relative;
+}
+.doc.json ul > li:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.doc.json ul > li .heading {
+  display: inline-block;
+  vertical-align: top;
+  line-height: 24px;
+  margin: 0;
+  font-weight: normal;
+}
+.doc.json ul > li .heading:before {
+  content: attr(data-keyword);
+}
+.doc.json ul > li.complete > .heading:before {
+  color: #388e3c;
+}
+.doc.json ul > li.incomplete > .heading:before {
+  color: #ccc;
+}
+.doc.json ul > li.failed > .heading:before {
+  color: #f50057;
+}
+.doc.json ul > li .stats {
+  float: right;
+  display: inline-block;
+  font-size: 0.8em;
+  vertical-align: top;
+}
+.doc.json ul > li .stats span {
+  margin-left: 1px;
+  padding: 2px 4px;
+  background-color: #f9f9f9;
+  line-height: 1.5rem;
+  border-radius: 2px;
+  color: #fff;
+}
+.doc.json ul > li .stats span.complete {
+  background-color: #388e3c;
+}
+.doc.json ul > li .stats span.incomplete {
+  background-color: #ccc;
+}
+.doc.json ul > li .stats span.failed {
+  background-color: #f50057;
+}
+.doc.json ul > li .stats span[data-value="0"] {
+  display: none;
+}
+.doc.json ul.features > li {
+  padding-bottom: 20px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #eee;
+}
+.doc.json ul.features > li > .stats {
+  margin-right: 8px;
+}
+.doc.json ul.scenarios li.scenario {
+  background-color: #f9f9f9;
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 2px;
+}
+.doc.json ul.steps {
+  font-size: 0.9em;
+  margin-top: 4px;
+}
+.doc.json ul.steps li.step {
+  background-color: #fff;
+  padding: 2px 8px;
+  margin-bottom: 1px;
+}
+.doc.json ul.steps li.step .heading {
+  vertical-align: middle;
+}
+.doc.json ul.steps li.step.failed .message {
+  color: #000;
+  font-size: 0.8em;
+  line-height: 1.5em;
+  margin: 0.5em 0.5em 0.5em 3em;
+  padding-left: 1em;
+  border-left: 2px solid #f50057;
+}
+
+/*# sourceMappingURL=json-converter.css.map */

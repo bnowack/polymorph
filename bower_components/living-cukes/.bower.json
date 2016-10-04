@@ -1,0 +1,46 @@
+{
+  "name": "living-cukes",
+  "homepage": "https://github.com/bnowack/living-cukes",
+  "authors": [
+    "Benjamin Nowack <mail@bnowack.de>"
+  ],
+  "description": "A client-side library for generating Living Documentation from Markdown files and Cucumber JSON reports",
+  "main": "src/app/app.js",
+  "moduleType": "amd",
+  "keywords": [
+    "living",
+    "documentation",
+    "cucumber",
+    "markdown"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "dev"
+  ],
+  "dependencies": {
+    "jquery": "*",
+    "requirejs": "^2.2.0",
+    "requirejs-plugins": "^1.0.3",
+    "normalize-css": "^4.2.0",
+    "require-css": "^0.1.8",
+    "pagedown": "ujifgc/pagedown",
+    "prettify": "google/code-prettify",
+    "roboto-fontface": "^0.5.0"
+  },
+  "devDependencies": {
+    "scss-watcher": "bnowack/scss-watcher"
+  },
+  "version": "0.1.7",
+  "_release": "0.1.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.7",
+    "commit": "39671827344cb296167584db9ce8b56e19f78715"
+  },
+  "_source": "git://github.com/bnowack/living-cukes.git",
+  "_target": "*",
+  "_originalSource": "bnowack/living-cukes"
+}
