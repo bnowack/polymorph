@@ -1,0 +1,81 @@
+<!-- polymorph-exception -->
+
+<link rel="import" href="../../../../../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../../../../../bower_components/paper-card/paper-card.html"/>
+
+<dom-module id="polymorph-app-exception">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                margin: 8px 0 16px 0;
+
+                --paper-card: {
+                    display: block;
+                };
+
+                --paper-card-header: {
+                    background-color: #f9f9f9;
+                };
+
+                --paper-card-header-text: {
+                    font-size: 16px;
+                    color: var(--polymorph-app-error-color);
+                };
+
+                --paper-card-content: {
+
+                };
+
+            }
+
+
+            :host ::content ul.trace {
+                margin: 0;
+                line-height: 2;
+            }
+
+            :host ::content .file {
+                border-bottom: 1px dotted #333;
+            }
+
+        </style>
+        <paper-card heading="{{message}}">
+            <div class="card-content"><content></content></div>
+        </paper-card>
+    </template>
+
+    <script>
+        Polymer({
+
+            // register element
+            is: 'polymorph-app-exception',
+
+            properties: {
+                code: {
+                    type: String,
+                    value: ''
+                },
+                message: {
+                    type: String,
+                    value: ''
+                },
+            },
+
+            // activate element
+            attached: function () {
+                // shorten paths
+                this.shortenPaths()
+            },
+
+            shortenPaths: function () {
+                Polymer.dom(this).querySelectorAll('.file').forEach(function(el) {
+                    Polymer.dom(el).setAttribute('title', el.textContent);
+                    el.textContent = el.textContent.replace(/^.*\/([^\/]+)/, '$1');
+                })
+            }
+
+        });
+    </script>
+
+</dom-module>

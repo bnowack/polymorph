@@ -1,0 +1,51 @@
+<!-- polymorph-app-header -->
+
+<link rel="import" href="../element-behaviors/fade-in.html"/>
+
+<dom-module id="polymorph-app-header">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                height: 40px;
+                background: #fff;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+            }
+
+            :host header {
+                @apply(--polymorph-app-container);
+            }
+
+            :host a {
+                display: inline-block;
+                height: 40px;
+                width: 40px;
+                background: transparent url("../img/favicon.png") center no-repeat;
+                background-size: 32px 32px;
+            }
+        </style>
+
+        <header>
+            <a href="[[base]]"></a>
+        </header>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            // register element
+            is: 'polymorph-app-header',
+
+            properties: {
+                base: String
+            },
+
+            behaviors: [polymorphFadeIn]
+
+        });
+    </script>
+
+</dom-module>
+
+

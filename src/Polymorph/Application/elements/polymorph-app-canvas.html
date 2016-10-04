@@ -1,0 +1,28 @@
+<!-- polymorph-app-canvas -->
+
+<dom-module id="polymorph-app-canvas">
+    <template>
+        <style include="shared-styles">
+            :host {
+                @apply(--polymorph-app-container);
+                padding-top: 16px;
+            }
+        </style>
+
+
+        <section>
+            <content></content>
+        </section>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            // register element
+            is: 'polymorph-app-canvas',
+
+        });
+    </script>
+
+</dom-module>

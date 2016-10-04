@@ -1,0 +1,147 @@
+<!-- polymorph-app -->
+
+<!--suppress HtmlUnknownTarget, JSUnresolvedVariable -->
+<link rel="import" href="../../../../../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../../../../../bower_components/app-route/app-location.html"/>
+<link rel="import" href="../../../../../../bower_components/app-route/app-route.html"/>
+<link rel="import" href="../../../../../../bower_components/iron-pages/iron-pages.html"/>
+<link rel="import" href="../../../../../../bower_components/iron-selector/iron-selector.html"/>
+<link rel="import" href="../../../../../../bower_components/iron-ajax/iron-ajax.html"/>
+
+<dom-module id="polymorph-app">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                background-color: var(--polymorph-app-background-color);
+                min-height: 100vh;
+                padding-bottom: var(--polymorph-app-footer-height);
+                box-sizing: border-box;
+                opacity: 1;
+                        transition: opacity 0.5s;
+                -webkit-transition: opacity 0.5s;
+            }
+        </style>
+
+        <app-location route="{{route}}"></app-location>
+        <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{tailData}}"></app-route>
+        <iron-ajax id="app-view-api" url="" handle-as="document" on-response="onViewLoaded" on-error="onViewLoaded"></iron-ajax>
+
+        <content></content>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'polymorph-app',
+
+            created: function () {
+                // de-flag body
+                document.querySelector("body").classList.remove('initializing');
+                this.log = ['created'];
+                // add forEach method to NodeLists and HTMLCollections (lacks in PhantomJS)
+                NodeList.prototype.forEach = Array.prototype.forEach;
+                HTMLCollection.prototype.forEach = Array.prototype.forEach;
+            },
+
+            properties: {
+                /**
+                 * The application's current view (a path)
+                 */
+                view: {
+                    type: String,
+                    reflectToAttribute: true,
+                    value: Polymorph.activeView,
+                    observer: 'onViewChanged'
+                }
+            },
+
+            observers: [
+                'onRouteChanged(routeData)',    // trigger onRouteChanged when routeData changes
+                'onRouteChanged(tailData)'      // trigger onRouteChanged when tailData changes
+            ],
+
+            /**
+             * Sets the element's `view` parameter when the route changes
+             */
+            onRouteChanged: function () {
+                if (!this.tailData || this.tailData.prefix === null) {
+                    return; // route not parsed yet
+                }
+                this.view = (this.tailData.prefix || '') + (this.tailData.path || '');
+                window.state = this.view;
+            },
+
+            /**
+             * Handles a view-change
+             */
+            onViewChanged: function () {
+                this.activateView(this.view);
+            },
+
+            /**
+             * Loads a changed view
+             */
+            activateView: function (view) {
+                if (this.view === Polymorph.activeView) {
+                    return; // false positive
+                }
+                // set active view
+                Polymorph.activeView = view;
+                // fetch view
+                this.$['app-view-api'].set('url', view + '?partials=true');
+                this.$['app-view-api'].generateRequest();
+            },
+
+            /**
+             * Applies a loaded view
+             */
+            onViewLoaded: function () {
+                var self = this;
+                var $app = this;
+                // extract response
+                var response = this.$['app-view-api'].lastResponse;
+                var error = this.$['app-view-api'].lastError;
+                var $response = response
+                        ? response
+                        : error.response || null;
+                if (!$response) {// can't render anything inline, hard refresh
+                    window.location.href = Polymorph.activeView;
+                    return;
+                }
+                // extract partials
+                this.partials = $response.querySelectorAll('.polymorph-partial');
+                // update meta tags
+                $response.querySelectorAll('meta').forEach(function (meta) {
+                    var name = meta.getAttribute('name');
+                    var value = meta.getAttribute('value');
+                    document.querySelector('meta[name="' + name + '"]').setAttribute('value', value);
+                });
+                // update title
+                document.querySelector('title').textContent = $response.querySelector('title').textContent;
+                // import any elements
+                var imports = $response.querySelectorAll('link[rel="import"]');
+                this.pendingImports = imports.length;
+                imports.forEach(function (link) {
+                    $app.importHref(link.getAttribute('href'), $app.onImportLoaded, $app.onImportLoaded, true);
+                });
+            },
+
+            /**
+             * Triggers `partial.loaded` and `my-partial-element-name.loaded` events
+             */
+            onImportLoaded: function () {
+                var $app = this;
+                this.pendingImports--;
+                if (this.pendingImports === 0) {
+                    this.partials.forEach(function($partial) {
+                        $app.fire('partial.loaded', { $partial: $partial });
+                        $app.fire($partial.tagName.toLowerCase() + '.loaded', { $partial: $partial });
+                    });
+                }
+            }
+
+        });
+    </script>
+
+</dom-module>

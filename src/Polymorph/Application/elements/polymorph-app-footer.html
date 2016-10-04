@@ -1,0 +1,67 @@
+<!-- polymorph-app-footer -->
+
+<!--suppress JSUnusedGlobalSymbols, JSUnresolvedVariable, HtmlUnknownTarget -->
+<link rel="import" href="../../../../../../bower_components/iron-ajax/iron-ajax.html"/>
+
+<dom-module id="polymorph-app-footer">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                line-height: var(--polymorph-app-footer-height);
+                background: #333;
+                color: #666;
+                font-size: 14px;
+                text-align: right;
+                margin-top: 20px;
+            }
+
+            :host footer {
+                @apply(--polymorph-app-container);
+            }
+
+            :host a {
+                text-decoration: none;
+                color: #999;
+            }
+
+            :host .version {
+                font-size: 0.9em;
+            }
+
+        </style>
+
+        <iron-ajax id="bower" auto url="../../../../bower.json" handle-as="json" on-response="onBowerJsonLoaded"></iron-ajax>
+
+        <footer>
+            powered by <a href="https://github.com/bnowack/polymorph">Polymorph</a>
+            <template is="dom-if" if="{{version}}">
+                (<span class="version">v{{version}}</span>)
+            </template>
+        </footer>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'polymorph-app-footer',
+
+            properties: {
+                version: {
+                    type: String,
+                    value: ''
+                }
+            },
+
+            onBowerJsonLoaded: function () {
+                this.set('version', this.$.bower.lastResponse.version || null);
+            }
+
+        });
+    </script>
+
+</dom-module>
