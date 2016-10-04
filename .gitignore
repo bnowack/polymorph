@@ -1,8 +1,16 @@
 /.idea
 /bower_components
+!/bower_components/jquery/dist
+!/bower_components/living-cukes
+!/bower_components/normalize-css/normalize.css
+!/bower_components/pagedown/Markdown.Converter.js
+!/bower_components/prettify/src
+!/bower_components/require-css
+!/bower_components/requirejs
+!/bower_components/requirejs-plugins/lib
+!/bower_components/roboto-fontface
 /data
 /dev/**/reports
-/nbproject
 /node_modules
 /vendor
 .DS_Store
