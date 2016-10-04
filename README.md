@@ -35,3 +35,7 @@ so that relative element imports work:
     cd /path/to/repo
     bower link
     bower link polymorph
+
+## Documentation
+
+* ["Living" documentation](http://bnowack.github.io/polymorph/documentation.html)
