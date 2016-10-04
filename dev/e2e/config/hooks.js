@@ -5,7 +5,6 @@ module.exports = function () {
 
     this.Before(function (scenario, callback) {
 
-
         callback();
 
     });
