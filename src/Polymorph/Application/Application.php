@@ -21,6 +21,9 @@ class Application extends SilexApplication
     }
     use Polymorph\Config\ConfigTrait;
 
+    /** @var string Application base path (with trailing slash) */
+    protected $base = null;
+
     /**
      * Instantiate a new Application.
      *
@@ -43,9 +46,35 @@ class Application extends SilexApplication
     {
         if (!$this->booted) {
             parent::boot();
+            $this->initBase();
             $this->initRoutes();
             $this->initErrorHandler();
         }
+    }
+
+    /**
+     * Detects and sets the application's base path from configured bases and the given request
+     *
+     * @param Request|null $request Request
+     */
+    protected function initBase(Request $request = null)
+    {
+        if (null === $request) {
+            $request = Request::createFromGlobals();
+        }
+        $base = '/';// default
+        $requestPath = $request->getPathInfo();// includes any sub-dir paths from web root
+        $configuredBases = $this->config('base');
+        if (!is_array($configuredBases)) {
+            $configuredBases = [$configuredBases];
+        }
+        foreach ($configuredBases as $configuredBase) {
+            if (strpos($requestPath, $configuredBase) === 0) {
+                $base = $configuredBase;
+                break;// break on first match
+            }
+        }
+        $this->base = $base;
     }
 
     /**
@@ -55,7 +84,8 @@ class Application extends SilexApplication
     {
         $routes = $this->config('routes', array());
         foreach ($routes as $path => $handler) {
-            $this->match($path, $handler);
+            $pathWithBase = $this->base . ltrim($path, '/');
+            $this->match($pathWithBase, $handler);
         }
     }
 
@@ -125,10 +155,10 @@ class Application extends SilexApplication
         $request = $this['request_stack']->getCurrentRequest();
 
         return [
-            "base" => $this->config('base'),
-            "meta" => (array) $this->config('meta'),
-            "icons" => (array) $this->config('icons'),
-            "templates" => (array) $this->config('templates'),
+            "base" => $this->base,
+            "meta" => (array)$this->config('meta'),
+            "icons" => (array)$this->config('icons'),
+            "templates" => (array)$this->config('templates'),
             "resetCss" => $this->getResetCss(),
             "startupBgColor" => $this->config('startupBgColor'),
             "request" => $request,
