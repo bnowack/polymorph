@@ -14,6 +14,29 @@
     <meta name="og:type" content="{{ meta.type.facebook }}"/>
     <meta name="og:image" content="{{ icons.facebook }}"/>
 
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "{{ meta.type.schema }}",
+            "url": "{{ meta.url }}",
+            "name": "{{ meta.name }}",
+            "description": "{{ meta.description }}",
+            "image": "{{ icons.schema }}"
+        }
+    </script>
+    {% if meta.organization is defined %}
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "Organization",
+            "name": "{{ meta.organization }}",
+            "address": "{{ meta.address }}",
+            "email": "{{ meta.email }}",
+            "telephone": "{{ meta.phone }}"
+        }
+    </script>
+    {% endif %}
+
     <base href="{{ base }}"/>
 
     <link rel="shortcut icon" href="{{ icons.browser }}" data-size="32x32"/>

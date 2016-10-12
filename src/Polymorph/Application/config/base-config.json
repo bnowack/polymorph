@@ -3,10 +3,15 @@
   "meta": {
     "name": "Polymorph Framework",
     "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
+    "url": "https://github.com/bnowack/polymorph",
     "language": "en",
     "type" : {
-      "facebook": "website"
+      "facebook": "website",
+      "schema": "SoftwareApplication"
     },
+    "address": "",
+    "email": "",
+    "phone": "",
     "titleSuffix": " - Polymorph Framework",
     "robots": "index,follow",
     "viewport": "width=device-width, initial-scale=1"
@@ -14,7 +19,8 @@
   "icons": {
     "browser": "bower_components/polymorph/src/Polymorph/Application/img/favicon.png",
     "app": "bower_components/polymorph/src/Polymorph/Application/img/touch-icon.png",
-    "facebook": "bower_components/polymorph/src/Polymorph/Application/img/logo.png"
+    "facebook": "bower_components/polymorph/src/Polymorph/Application/img/logo.png",
+    "schema": "bower_components/polymorph/src/Polymorph/Application/img/logo.png"
   },
   "templates": {
     "manifest": "Polymorph/Application/templates/manifest.json.twig",
