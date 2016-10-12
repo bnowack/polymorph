@@ -36,7 +36,6 @@
             created: function () {
                 // de-flag body
                 document.querySelector("body").classList.remove('initializing');
-                this.log = ['created'];
                 // add forEach method to NodeLists and HTMLCollections (lacks in PhantomJS)
                 NodeList.prototype.forEach = Array.prototype.forEach;
                 HTMLCollection.prototype.forEach = Array.prototype.forEach;
@@ -67,7 +66,6 @@
                     return; // route not parsed yet
                 }
                 this.view = (this.tailData.prefix || '') + (this.tailData.path || '');
-                window.state = this.view;
             },
 
             /**
