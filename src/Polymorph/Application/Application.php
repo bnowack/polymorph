@@ -130,6 +130,7 @@ class Application extends SilexApplication
             "icons" => (array) $this->config('icons'),
             "templates" => (array) $this->config('templates'),
             "resetCss" => $this->getResetCss(),
+            "startupBgColor" => $this->config('startupBgColor'),
             "request" => $request,
             "view" => [
                 "path" => $request->getPathInfo()
