@@ -179,7 +179,7 @@ class Application extends SilexApplication
         if (!$path) {
             return '';
         }
-        $css = file_get_contents($path);
+        $css = file_get_contents(POLYMORPH_APP_DIR . $path);
         $cssOnSingleLine = str_replace("\n", '', $css);
         return $cssOnSingleLine;
     }
