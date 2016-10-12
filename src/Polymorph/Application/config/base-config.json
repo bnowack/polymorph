@@ -4,7 +4,9 @@
     "name": "Polymorph Framework",
     "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
     "language": "en",
-    "type": "website",
+    "type" : {
+      "facebook": "website"
+    },
     "titleSuffix": " - Polymorph Framework",
     "robots": "index,follow",
     "viewport": "width=device-width, initial-scale=1"
