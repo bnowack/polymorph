@@ -128,7 +128,7 @@ class Application extends SilexApplication
      * @param array $parameters List of view parameters
      * @return array Extended parameters
      */
-    protected function buildTemplateParameters($parameters)
+    public function buildTemplateParameters($parameters)
     {
         $globalParameters = $this->getGlobalTemplateParameters();
         $combinedParameters = $globalParameters;
