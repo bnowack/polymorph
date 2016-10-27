@@ -1,10 +1,11 @@
-<!-- polymorph-app -->
+<!--suppress HtmlUnknownTarget, JSUnresolvedVariable, JSUnusedGlobalSymbols -->
 
-<!--suppress HtmlUnknownTarget, JSUnresolvedVariable -->
 <link rel="import" href="../../../../../../bower_components/polymer/polymer.html"/>
 <link rel="import" href="../../../../../../bower_components/app-route/app-location.html"/>
 <link rel="import" href="../../../../../../bower_components/app-route/app-route.html"/>
 <link rel="import" href="../../../../../../bower_components/iron-ajax/iron-ajax.html"/>
+<link rel="import" href="shared-styles.html"/>
+
 
 <dom-module id="polymorph-app">
     <template>
@@ -16,7 +17,7 @@
                 padding-bottom: var(--polymorph-app-footer-height);
                 box-sizing: border-box;
                 opacity: 1;
-                        transition: opacity 0.5s;
+                transition: opacity 0.5s;
                 -webkit-transition: opacity 0.5s;
             }
         </style>
@@ -98,7 +99,6 @@
              * Applies a loaded view
              */
             onViewLoaded: function () {
-                var self = this;
                 var $app = this;
                 // extract response
                 var response = this.$['app-view-api'].lastResponse;
