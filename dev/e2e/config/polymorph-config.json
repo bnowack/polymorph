@@ -4,5 +4,6 @@
     "/"
   ],
   "routes": {
-  }
+  },
+  "dataDirectory": "dev/data"
 }

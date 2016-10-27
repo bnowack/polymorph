@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Polymorph;
 use Polymorph\Config\ConfigServiceProvider;
 use Polymorph\Database\DatabaseServiceProvider;
+use Polymorph\Schema\SchemaServiceProvider;
 
 /**
  * Polymorph Application class
@@ -46,6 +47,9 @@ class Application extends SilexApplication
 
         // register DB service provider
         $this->register(new DatabaseServiceProvider('db'));
+
+        // register schema service provider
+        $this->register(new SchemaServiceProvider('schema'));
 
         // enable asynchronous tasks after the response has been sent
         $this->after(function () {

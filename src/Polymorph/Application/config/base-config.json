@@ -34,5 +34,9 @@
     "/": "\\Polymorph\\Application\\ApplicationController::handleHomeRequest",
     "/manifest.json": "\\Polymorph\\Application\\ApplicationController::handleManifestRequest",
     "/config": "\\Polymorph\\Config\\ConfigController::handleConfigRequest"
+  },
+  "dataDirectory": "data",
+  "dbs": {
+    "schema": { "driver": "pdo_sqlite" }
   }
 }
