@@ -10,7 +10,10 @@
   ],
   "require": {
     "silex/silex": "2.*",
-    "twig/twig": "1.*"
+    "twig/twig": "1.*",
+    "symfony/security-csrf": "~3.1",
+    "symfony/security": "~3.1",
+    "doctrine/dbal": "~2.2"
   },
   "require-dev": {
     "phpspec/phpspec": "2.*",
@@ -22,6 +25,12 @@
     "psr-4": {
       "Polymorph\\": "src/Polymorph",
       "spec\\Polymorph\\": "src/Polymorph"
+    },
+    "psr-0": {
+      "Polymorph\\Schema\\Versions\\": [
+        "src/Polymorph/Schema/versions",
+        "data/schema/versions"
+      ]
     }
   }
 }
