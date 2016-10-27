@@ -165,29 +165,12 @@ class Application extends SilexApplication
             "meta" => (array)$this->config('meta'),
             "icons" => (array)$this->config('icons'),
             "templates" => (array)$this->config('templates'),
-            "resetCss" => $this->getResetCss(),
             "startupBgColor" => $this->config('startupBgColor'),
             "request" => $request,
             "view" => [
                 "path" => $request->getPathInfo()
             ]
         ];
-    }
-
-    /**
-     * Returns the configured reset-CSS code on a single line
-     *
-     * @return string CSS rules
-     */
-    protected function getResetCss()
-    {
-        $path = $this->config('resetCss');
-        if (!$path) {
-            return '';
-        }
-        $css = file_get_contents(POLYMORPH_APP_DIR . $path);
-        $cssOnSingleLine = str_replace("\n", '', $css);
-        return $cssOnSingleLine;
     }
 
     /**

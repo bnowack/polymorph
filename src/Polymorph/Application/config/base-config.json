@@ -28,7 +28,6 @@
     "error": "Polymorph/Application/templates/error.html.twig",
     "partial": "Polymorph/Application/templates/partial.html.twig"
   },
-  "resetCss": "bower_components/normalize-css/normalize.css",
   "startupBgColor": "#fff",
   "routes": {
     "/": "\\Polymorph\\Application\\ApplicationController::handleHomeRequest",
