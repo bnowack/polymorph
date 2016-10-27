@@ -34,6 +34,7 @@
     "/": "\\Polymorph\\Application\\ApplicationController::handleHomeRequest",
     "/manifest.json": "\\Polymorph\\Application\\ApplicationController::handleManifestRequest",
     "/config": "\\Polymorph\\Config\\ConfigController::handleConfigRequest"
+    "/schema-versions": "\\Polymorph\\Schema\\SchemaController::handleSchemaVersionsRequest"
   },
   "dataDirectory": "data",
   "dbs": {
