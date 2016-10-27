@@ -4,6 +4,7 @@
     "/"
   ],
   "routes": {
+    "/secured-test": "\\Polymorph\\Security\\SecurityController::handleSecuredRequest"
   },
   "dataDirectory": "dev/data",
   "adminAccount": "admin"
