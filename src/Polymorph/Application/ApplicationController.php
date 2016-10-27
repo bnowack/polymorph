@@ -49,9 +49,6 @@ class ApplicationController
 
         // prepare template parameters
         $params = [
-            "baseTemplate" => $app->isPartialRequest()
-                ? $app->config('templates')->partial
-                : $app->config('templates')->page,
             "pageTitle" => "Error {$exception->getStatusCode()}",
             "exceptions" => $exceptions,
             "meta" => [
@@ -60,12 +57,12 @@ class ApplicationController
         ];
 
         // render template
-        $routeTemplate = $app->config('templates')->error;
-        return $app->render($routeTemplate, $params);
+        $template = $app->config('templates')->error;
+        return $app->render($template, $params);
     }
 
     /**
-     * Generates a default "hello world" response
+     * Generates a (default) welcome response
      *
      * @param Application $app
      *
@@ -77,9 +74,7 @@ class ApplicationController
             'pageTitle' => 'Welcome',
             'content' => 'Welcome to Polymorph'
         ];
-        $routeTemplate = $app->isPartialRequest()
-            ? $app->config('templates')->partial
-            : $app->config('templates')->page;
-        return $app->render($routeTemplate, $params);
+        $template = $app->config('templates')->content;
+        return $app->render($template, $params);
     }
 }

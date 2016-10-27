@@ -182,19 +182,26 @@ class Application extends SilexApplication
             "request" => $request,
             "view" => [
                 "path" => $request->getPathInfo()
-            ]
+            ],
+            "baseTemplate" => $this->isPartialRequest($request)
+                ? $this->config('templates')->partial
+                : $this->config('templates')->page
         ];
     }
 
     /**
-     * Checks if the current request asks for a layout-free view partial or the whole page
+     * Checks if the given request asks for a layout-free view partial or the whole page
+     *
+     * @param Request $request
      *
      * @return bool TRUE for partials, FALSE for complete pages
      */
-    public function isPartialRequest()
+    public function isPartialRequest($request = null)
     {
         /* @var Request $request */
-        $request = $this['request_stack']->getCurrentRequest();
+        if (null === $request) {
+            $request = $this['request_stack']->getCurrentRequest();
+        }
         return ($request->query->get('partials') === 'true');
     }
 }

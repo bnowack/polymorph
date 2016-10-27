@@ -1,0 +1,17 @@
+
+{% extends baseTemplate %}
+
+{% block imports %}
+
+    {{ parent() }}
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Page/elements/polymorph-page.html"/>
+
+{% endblock %}
+
+{% block view %}
+
+    <polymorph-page class="polymorph-partial" path="{{ view.path }}">
+        {{ content }}
+    </polymorph-page>
+
+{% endblock %}
