@@ -41,6 +41,19 @@ class Application extends SilexApplication
         // allow loading templates from app and polymorph src directories
         $this->register(new TwigServiceProvider(), ['twig.path' => POLYMORPH_APP_DIR]);
         $this['twig.loader.filesystem']->addPath(POLYMORPH_SRC_DIR);
+
+        // enable asynchronous tasks after the response has been sent
+        $this->after(function () {
+            $response = func_get_arg(1);
+            $contentLength = mb_strlen($response->getContent(), 'utf-8');
+            $response->headers->set('Content-length', $contentLength, true);
+            $response->headers->set('Connection', 'close', true);
+        });
+
+        // run asynchronous tasks
+        $this->finish(function () {
+            flush();
+        });
     }
 
     /**
