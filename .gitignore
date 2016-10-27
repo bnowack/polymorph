@@ -2,6 +2,7 @@
 /bower_components
 /data
 /dev/**/reports
+/dev/data
 /nbproject
 /node_modules
 /vendor
