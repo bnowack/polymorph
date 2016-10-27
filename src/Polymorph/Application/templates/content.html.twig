@@ -11,7 +11,7 @@
 {% block view %}
 
     <polymorph-page class="polymorph-partial" path="{{ view.path }}">
-        {{ content }}
+        {{ content|raw }}
     </polymorph-page>
 
 {% endblock %}
