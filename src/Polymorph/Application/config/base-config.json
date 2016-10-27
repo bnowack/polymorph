@@ -38,6 +38,8 @@
   },
   "dataDirectory": "data",
   "dbs": {
-    "schema": { "driver": "pdo_sqlite" }
-  }
+    "schema": { "driver": "pdo_sqlite" },
+    "users": { "driver": "pdo_sqlite" }
+  },
+  "adminAccount": ""
 }
