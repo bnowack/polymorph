@@ -4,12 +4,14 @@ namespace Polymorph\Application;
 
 use Silex\Application as SilexApplication;
 use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\SessionServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Polymorph;
 use Polymorph\Config\ConfigServiceProvider;
 use Polymorph\Database\DatabaseServiceProvider;
+use Polymorph\User\UserServiceProvider;
 use Polymorph\Schema\SchemaServiceProvider;
 
 /**
@@ -50,6 +52,12 @@ class Application extends SilexApplication
 
         // register schema service provider
         $this->register(new SchemaServiceProvider('schema'));
+
+        // register session service provider
+        $this->register(new SessionServiceProvider());
+
+        // register user service provider
+        $this->register(new UserServiceProvider('users'));
 
         // enable asynchronous tasks after the response has been sent
         $this->after(function () {
