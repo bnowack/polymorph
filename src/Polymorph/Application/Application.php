@@ -32,6 +32,10 @@ class Application extends SilexApplication
     public function __construct(array $values = array())
     {
         parent::__construct($values);
+
+        // register error handler
+        $this->error(array($this, 'onError'));
+
         // register config service provider
         $this->register(new ConfigServiceProvider('config'));
         // allow loading templates from app and polymorph src directories
@@ -48,7 +52,6 @@ class Application extends SilexApplication
             parent::boot();
             $this->initBase();
             $this->initRoutes();
-            $this->initErrorHandler();
         }
     }
 
@@ -90,19 +93,22 @@ class Application extends SilexApplication
     }
 
     /**
-     * Initializes a custom handler for errors
+     * Renders errors
+     *
+     * @param \Exception $exception Exception instance
+     * @param string|integer $code Error code
+     *
+     * @return Response
      */
-    protected function initErrorHandler()
+    public function onError(\Exception $exception, $code = 'Error')
     {
-        $this->error(function (\Exception $exception, $code) {
-            $controller = new ApplicationController();
-            $method = "handle{$code}Request";
-            if (method_exists($controller, $method)) {
-                return $controller->$method($this, $exception);
-            } else {
-                return $controller->handleErrorRequest($this, $exception);
-            }
-        });
+        $controller = new ApplicationController();
+        $method = "handle{$code}Request";
+        if (method_exists($controller, $method)) {
+            return $controller->$method($this, $exception);
+        } else {
+            return $controller->handleErrorRequest($this, $exception);
+        }
     }
 
     /**
