@@ -27,6 +27,7 @@
     "page": "Polymorph/Application/templates/page.html.twig",
     "partial": "Polymorph/Application/templates/partial.html.twig",
     "error": "Polymorph/Application/templates/error.html.twig",
+    "login": "Polymorph/Security/templates/login.html.twig",
     "content": "Polymorph/Application/templates/content.html.twig"
   },
   "startupBgColor": "#fff",
@@ -34,7 +35,8 @@
     "/": "\\Polymorph\\Application\\ApplicationController::handleHomeRequest",
     "/manifest.json": "\\Polymorph\\Application\\ApplicationController::handleManifestRequest",
     "/config": "\\Polymorph\\Config\\ConfigController::handleConfigRequest"
-    "/schema-versions": "\\Polymorph\\Schema\\SchemaController::handleSchemaVersionsRequest"
+    "/schema-versions": "\\Polymorph\\Schema\\SchemaController::handleSchemaVersionsRequest",
+    "/login": "\\Polymorph\\Security\\SecurityController::handleLoginRequest"
   },
   "dataDirectory": "data",
   "dbs": {
