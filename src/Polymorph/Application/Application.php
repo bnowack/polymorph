@@ -39,7 +39,8 @@ class Application extends SilexApplication
 
         // register config service provider
         $this->register(new ConfigServiceProvider('config'));
-        // allow loading templates from app and polymorph src directories
+
+        // register twig service provider, allow loading templates from app and polymorph src directories
         $this->register(new TwigServiceProvider(), ['twig.path' => POLYMORPH_APP_DIR]);
         $this['twig.loader.filesystem']->addPath(POLYMORPH_SRC_DIR);
 
