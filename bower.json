@@ -26,7 +26,6 @@
     "**/*.php"
   ],
   "dependencies": {
-    "normalize-css": "^4.2.0",
     "polymer": "Polymer/polymer#^1.*",
     "app-layout": "polymerelements/app-layout#^0.*",
     "app-route": "polymerelements/app-route#^0.*",
