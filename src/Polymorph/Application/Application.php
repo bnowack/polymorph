@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use Polymorph;
 use Polymorph\Config\ConfigServiceProvider;
+use Polymorph\Database\DatabaseServiceProvider;
 
 /**
  * Polymorph Application class
@@ -41,6 +42,9 @@ class Application extends SilexApplication
         // allow loading templates from app and polymorph src directories
         $this->register(new TwigServiceProvider(), ['twig.path' => POLYMORPH_APP_DIR]);
         $this['twig.loader.filesystem']->addPath(POLYMORPH_SRC_DIR);
+
+        // register DB service provider
+        $this->register(new DatabaseServiceProvider('db'));
 
         // enable asynchronous tasks after the response has been sent
         $this->after(function () {
