@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Polymorph;
 use Polymorph\Config\ConfigServiceProvider;
 use Polymorph\Database\DatabaseServiceProvider;
+use Polymorph\Security\SecurityServiceProvider;
 use Polymorph\User\UserServiceProvider;
 use Polymorph\Schema\SchemaServiceProvider;
 
@@ -58,6 +59,9 @@ class Application extends SilexApplication
 
         // register user service provider
         $this->register(new UserServiceProvider('users'));
+
+        // register security service provider
+        $this->register(new SecurityServiceProvider('security'));
 
         // enable asynchronous tasks after the response has been sent
         $this->after(function () {
