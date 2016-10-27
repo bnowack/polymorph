@@ -22,7 +22,7 @@ class Application extends SilexApplication
     use Polymorph\Config\ConfigTrait;
 
     /** @var string Application base path (with trailing slash) */
-    protected $base = null;
+    public $base = null;
 
     /**
      * Instantiate a new Application.
