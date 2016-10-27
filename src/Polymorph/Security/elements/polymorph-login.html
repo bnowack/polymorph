@@ -1,0 +1,106 @@
+
+<link rel="import" href="../../../../../../bower_components/polymer/polymer.html"/>
+<link rel="import" href="../../../../../../bower_components/iron-form/iron-form.html"/>
+<link rel="import" href="../../../../../../bower_components/paper-input/paper-input.html"/>
+<link rel="import" href="../../../../../../bower_components/paper-button/paper-button.html"/>
+<link rel="import" href="../../Application/elements/shared-styles.html"/>
+
+<dom-module id="polymorph-login">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            form {
+                max-width: 200px;
+                margin: 0 auto;
+            }
+
+            paper-button {
+                display: block;
+                margin: 16px 0 0 0;
+                padding: 6px 8px;
+                background-color: var(--polymorph-app-link-color);
+                color: #fff;
+            }
+
+            .login-error {
+                color: var(--polymorph-app-error-color);
+                padding: 16px 8px;
+                font-size: 0.85em;
+            }
+
+        </style>
+
+        <form is="iron-form" id="login" method="POST" action="[[action]]" on-submit="onSubmit">
+            <input type="hidden" name="token" value="[[token]]"/>
+            <paper-input name="username" label="[[usernameLabel]]" required auto-validate></paper-input>
+            <paper-input name="password" label="[[passwordLabel]]" type="password"></paper-input>
+            <template is="dom-if" if="[[loginFailed]]">
+                <div class="login-error">
+                    [[errorText]]
+                </div>
+            </template>
+            <paper-button raised on-click="submit">Sign in</paper-button>
+        </form>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'polymorph-login',
+
+            properties: {
+                usernameLabel: {
+                    type: String
+                },
+                passwordLabel: {
+                    type: String
+                },
+                token: {
+                    type: String,
+                    value: ''
+                },
+                action: {
+                    type: String,
+                    value: window.base + 'login'
+                },
+                errorText: {
+                    type: String,
+                    value: 'login failed'
+                },
+                loginFailed: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                }
+            },
+
+            ready: function () {
+                var self = this;
+                this.$.login.addEventListener('iron-form-response', function(event) {
+                    self.onResponse.call(self, event.detail.response);
+                });
+            },
+
+            submit: function (event) {
+                var form = this.$.login;
+                if (form.validate()) {
+                    form.submit();
+                }
+            },
+
+            onResponse: function (response) {
+                if (response.success) {
+                    document.querySelector('polymorph-app').reloadView();
+                } else {
+                    this.set('loginFailed', true);
+                }
+            }
+
+        });
+    </script>
+
+</dom-module>
