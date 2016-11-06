@@ -23,7 +23,8 @@
     "dev",
     "vendor",
     "composer.*",
-    "**/*.php"
+    "**/*.php",
+    "**/*.twig"
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.*",
