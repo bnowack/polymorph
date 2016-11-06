@@ -90,14 +90,19 @@
                 var form = this.$.login;
                 if (form.validate()) {
                     form.submit();
+                    clearTimeout(this.resetTO);
                 }
             },
 
             onResponse: function (response) {
+                var self = this;
                 if (response.success) {
                     document.querySelector('polymorph-app').reloadView();
                 } else {
                     this.$.failed.set('opened', true);
+                    this.resetTO = setTimeout(function () {
+                        self.$.failed.set('opened', false);
+                    }, 3000);
                 }
             }
 
