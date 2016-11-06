@@ -10,12 +10,14 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 class UserProvider implements UserProviderInterface
 {
+    /** @var Connection */
     protected $conn;
-    protected $encoder;
-    protected $session;
+
+    /** @var User */
     protected $currentUser;
 
     /**
@@ -27,19 +29,27 @@ class UserProvider implements UserProviderInterface
     public function __construct(Connection $conn, Session $session = null)
     {
         $this->conn = $conn;
-        $this->encoder = new BCryptPasswordEncoder(13);
-        $this->session = $session;
         $this->currentUser = null;
     }
 
     /**
      * Returns a query builder for the user database
      *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return QueryBuilder
      */
     protected function query()
     {
         return $this->conn->createQueryBuilder();
+    }
+
+    /**
+     * Creates a password encoder
+     *
+     * @return BCryptPasswordEncoder
+     */
+    protected function getEncoder()
+    {
+        return new BCryptPasswordEncoder(10);
     }
 
     /**
@@ -110,8 +120,10 @@ class UserProvider implements UserProviderInterface
             $user = $this->loadUserByUsername($user);
         }
         $this->currentUser = $user;
-        if ($this->session) {
-            $this->session->set('user', $user->getUsername());
+        /** @var Session $session */
+        $session = $this->app['session'];
+        if ($session) {
+            $session->set('user', $user->getUsername());
         }
         return true;
     }
@@ -141,11 +153,14 @@ class UserProvider implements UserProviderInterface
      */
     protected function loadUserFromSession()
     {
-        if (!$this->session) {
+        /** @var Session $session */
+        $session = $this->app['session'];
+
+        if (!$session) {
             return false;
         }
 
-        $username = $this->session->get('user');
+        $username = $session->get('user');
         if (!$username) {
             return false;
         }
@@ -170,7 +185,7 @@ class UserProvider implements UserProviderInterface
     {
         try {
             $user = $this->loadUserByUsername($username);
-            return $this->encoder->isPasswordValid($user->getPassword(), $password, '');
+            return $this->getEncoder()->isPasswordValid($user->getPassword(), $password, '');
         } catch (UsernameNotFoundException $exception) {
             return false;
         }
@@ -184,7 +199,7 @@ class UserProvider implements UserProviderInterface
      */
     public function encodePassword($password)
     {
-        return $this->encoder->encodePassword($password, null);
+        return $this->getEncoder()->encodePassword($password, null);
     }
 
     /**
