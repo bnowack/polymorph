@@ -32,20 +32,24 @@
                 font-size: 0.85em;
             }
 
+            #hidden-submit {
+                display: none;
+            }
+
         </style>
 
-        <form is="iron-form" id="login" method="POST" action="[[action]]" on-submit="onSubmit">
+        <form is="iron-form" name="login" id="login" method="POST" action="[[action]]">
             <input type="hidden" name="token" value="[[token]]"/>
-            <paper-input name="username" label="[[usernameLabel]]" required auto-validate></paper-input>
-            <paper-input name="password" label="[[passwordLabel]]" type="password"></paper-input>
+            <input id="hidden-submit" type="submit"/>
+            <paper-input name="username" label="[[usernameLabel]]" required auto-validate autocomplete></paper-input>
+            <paper-input name="password" label="[[passwordLabel]]" type="password" autocomplete></paper-input>
             <iron-collapse id="failed">
                 <div class="login-error">
                     [[errorText]]
                 </div>
             </iron-collapse>
-            <paper-button raised on-click="submit">[[buttonLabel]]</paper-button>
+            <paper-button raised on-click="submitForm">[[buttonLabel]]</paper-button>
         </form>
-
     </template>
 
     <script>
@@ -86,18 +90,21 @@
                 });
             },
 
-            submit: function (event) {
+            /**
+             * Submits the form via proper submit button so that native behavior kicks in (password saving on FF etc.)
+             */
+            submitForm: function () {
                 var form = this.$.login;
                 if (form.validate()) {
-                    form.submit();
                     clearTimeout(this.resetTO);
+                    form.querySelector('#hidden-submit').click();
                 }
             },
 
             onResponse: function (response) {
                 var self = this;
                 if (response.success) {
-                    document.querySelector('polymorph-app').reloadView();
+                    window.location.reload(true);
                 } else {
                     this.$.failed.set('opened', true);
                     this.resetTO = setTimeout(function () {
