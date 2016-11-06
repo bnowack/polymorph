@@ -11,9 +11,13 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Polymorph\Application\Application;
 
 class UserProvider implements UserProviderInterface
 {
+    /** @var Application */
+    protected $app;
+
     /** @var Connection */
     protected $conn;
 
@@ -23,12 +27,12 @@ class UserProvider implements UserProviderInterface
     /**
      * UserProvider constructor
      *
-     * @param Connection $conn User database connection
-     * @param Session|null $session User session
+     * @param Application $app Application instance
      */
-    public function __construct(Connection $conn, Session $session = null)
+    public function __construct(Application $app)
     {
-        $this->conn = $conn;
+        $this->app = $app;
+        $this->conn = $app['db']->connect('users');
         $this->currentUser = null;
     }
 

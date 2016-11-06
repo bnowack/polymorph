@@ -38,7 +38,11 @@ class UserServiceProvider implements ServiceProviderInterface, BootableProviderI
     public function register(Container $app)
     {
         // register self
-        $app[$this->name] = function () {
+        $app[$this->name] = function () use ($app) {
+            // create user provider
+            $userProviderClass = $app->config('userProvider', 'Polymorph\\User\\UserProvider');
+            $this->userProvider = new $userProviderClass($app);
+            // return service provider
             return $this;
         };
     }
@@ -52,8 +56,6 @@ class UserServiceProvider implements ServiceProviderInterface, BootableProviderI
     {
         // save app reference
         $this->app = $app;
-        // create user provider
-        $this->userProvider = new UserProvider($app['db']->connect('users'), $app['session']);
     }
 
     /**
