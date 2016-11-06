@@ -48,6 +48,7 @@ class SecurityController
             'token' => $app['security']->getToken('login'),
             'usernameLabel' => 'Email',
             'passwordLabel' => 'Password',
+            'buttonLabel' => 'Sign in',
             'errorText' => 'Wrong email or password. Please try again'
         ];
         $template = $app->config('templates')->login;
