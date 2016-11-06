@@ -4,6 +4,7 @@
 <link rel="import" href="../../../../../../bower_components/paper-input/paper-input.html"/>
 <link rel="import" href="../../../../../../bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="../../Application/elements/shared-styles.html"/>
+<link rel="import" href="../../../../../../bower_components/iron-collapse/iron-collapse.html"/>
 
 <dom-module id="polymorph-login">
     <template>
@@ -37,11 +38,11 @@
             <input type="hidden" name="token" value="[[token]]"/>
             <paper-input name="username" label="[[usernameLabel]]" required auto-validate></paper-input>
             <paper-input name="password" label="[[passwordLabel]]" type="password"></paper-input>
-            <template is="dom-if" if="[[loginFailed]]">
+            <iron-collapse id="failed">
                 <div class="login-error">
                     [[errorText]]
                 </div>
-            </template>
+            </iron-collapse>
             <paper-button raised on-click="submit">[[buttonLabel]]</paper-button>
         </form>
 
@@ -96,7 +97,7 @@
                 if (response.success) {
                     document.querySelector('polymorph-app').reloadView();
                 } else {
-                    this.set('loginFailed', true);
+                    this.$.failed.set('opened', true);
                 }
             }
 
