@@ -51,6 +51,10 @@
                 this.set('path', path);
                 // replace all contents
                 Polymer.dom(this).innerHTML = $partial.innerHTML;
+                // activate script tags
+                this.querySelectorAll('script').forEach(function (script) {
+                    eval(script.innerHTML);
+                });
             }
 
         });
