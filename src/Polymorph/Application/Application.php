@@ -67,19 +67,6 @@ class Application extends SilexApplication
 
         // register security service provider
         $this->register(new SecurityServiceProvider('security'));
-
-        // enable asynchronous tasks after the response has been sent
-        $this->after(function () {
-            $response = func_get_arg(1);
-            $contentLength = mb_strlen($response->getContent(), 'utf-8');
-            $response->headers->set('Content-length', $contentLength, true);
-            $response->headers->set('Connection', 'close', true);
-        });
-
-        // run asynchronous tasks
-        $this->finish(function () {
-            flush();
-        });
     }
 
     /**
