@@ -84,8 +84,20 @@ class Application extends SilexApplication
     {
         if (!$this->booted) {
             parent::boot();
+            $this->initCustomServiceProviders();
             $this->initBase();
             $this->initRoutes();
+        }
+    }
+
+    /**
+     * Registers and boots any service providers defined in config
+     */
+    protected function initCustomServiceProviders()
+    {
+        foreach ($this->config('serviceProviders', []) as $serviceName => $providerClassName) {
+            $this->register(new $providerClassName($serviceName));
+            $this[$serviceName]->boot($this);
         }
     }
 
