@@ -34,7 +34,6 @@ class ConfigServiceProvider implements ServiceProviderInterface, BootableProvide
      */
     public function register(Container $app)
     {
-        $this->app = $app;
         $app[$this->name] = function () {
             return new Config();
         };
@@ -47,6 +46,10 @@ class ConfigServiceProvider implements ServiceProviderInterface, BootableProvide
      */
     public function boot(Application $app)
     {
+        // save app reference
+        $this->app = $app;
+
+        // load configured files
         $this->loadFiles();
     }
 
