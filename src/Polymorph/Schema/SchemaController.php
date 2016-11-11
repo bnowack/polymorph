@@ -26,7 +26,7 @@ class SchemaController
             'content' => '
                 <h2>Applied Schema Versions</h2>
                 <ul>
-                    <li>' . join('</li></li>', $appliedVersions) . '</li>
+                    <li>' . join('</li><li>', $appliedVersions) . '</li>
                 </ul>
             '
         ];
