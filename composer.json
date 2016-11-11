@@ -24,12 +24,9 @@
   "autoload": {
     "psr-4": {
       "Polymorph\\": "src/Polymorph",
-      "spec\\Polymorph\\": "src/Polymorph"
-    },
-    "psr-0": {
+      "spec\\Polymorph\\": "src/Polymorph",
       "Polymorph\\Schema\\Versions\\": [
-        "src/Polymorph/Application/config/schema-versions",
-        "config/schema-versions"
+        "src/Polymorph/Application/config/schema-versions"
       ]
     }
   }
