@@ -67,7 +67,8 @@ class ConfigServiceProvider implements ServiceProviderInterface, BootableProvide
             'meta',
             'icons',
             'templates',
-            'routes'
+            'routes',
+            'dbs'
         );
 
         /* @var Config $config */
