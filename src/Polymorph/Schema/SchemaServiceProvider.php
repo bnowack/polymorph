@@ -64,7 +64,7 @@ class SchemaServiceProvider implements ServiceProviderInterface, BootableProvide
         $available = $this->getAvailableVersions();
         $latestAvailable = empty($available)
             ? null
-            : $available[0]['version'];
+            : array_slice($available, -1)[0]['version'];
         $targetVersion = $this->app->config('schemaVersion', $latestAvailable);
 
         // versions that should be applied
