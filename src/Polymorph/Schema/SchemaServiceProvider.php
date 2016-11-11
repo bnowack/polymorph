@@ -160,8 +160,8 @@ class SchemaServiceProvider implements ServiceProviderInterface, BootableProvide
     protected function getVersionDirectories()
     {
         $dirs = [
-            POLYMORPH_SRC_DIR . 'Polymorph/Schema/versions', // polymorph system schema versions
-            POLYMORPH_APP_DIR . $this->app->config('dataDirectory') . '/schema-versions'// application schema versions
+            POLYMORPH_SRC_DIR . 'Polymorph/Application/config/schema-versions', // polymorph system schema versions
+            POLYMORPH_APP_DIR . 'config/schema-versions'// application schema versions
         ];
         return array_filter($dirs, function ($dir) {
             return is_dir($dir);

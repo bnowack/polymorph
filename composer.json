@@ -28,8 +28,8 @@
     },
     "psr-0": {
       "Polymorph\\Schema\\Versions\\": [
-        "src/Polymorph/Schema/versions",
-        "data/schema/versions"
+        "src/Polymorph/Application/config/schema-versions",
+        "config/schema-versions"
       ]
     }
   }
