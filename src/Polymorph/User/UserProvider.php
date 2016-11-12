@@ -243,7 +243,6 @@ class UserProvider implements UserProviderInterface
             ->where('username = ?')->setParameter(0, strtolower($username))
             ->execute()
             ->fetch();
-        print_r($user);
         return !!$user;
     }
 
