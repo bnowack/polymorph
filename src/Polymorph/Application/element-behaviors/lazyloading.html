@@ -1,0 +1,40 @@
+<script>
+    /**
+     * Polymer behavior that lazy-loads element sets
+     */
+    polymorphLazyloading = {
+
+        properties: {
+            /**
+             * Registry for lazy-loaded elements
+             */
+            lazyloaded: {
+                type: Object,
+                value: {}
+            }
+        },
+
+        /**
+         * Lazy-loads an element and returns a Promise
+         *
+         * @param {Array} elements A list of element paths
+         * @return {Promise}
+         */
+        lazyload: function (elements) {
+            var self = this;
+            return new Promise(function (resolve, reject) {
+                var queueSize = elements.length;
+                elements.forEach(function (path) {
+                    var elementName = path.replace(/^.*\/([^\/]+)\.html.*$/, '$1');
+                    self.importHref(self.resolveUrl(path), function () {
+                        queueSize--;
+                        self.lazyloaded[elementName] = true;
+                        if (queueSize === 0) {
+                            self.async(resolve, 1);
+                        }
+                    }, reject);
+                });
+            });
+        }
+    }
+</script>
