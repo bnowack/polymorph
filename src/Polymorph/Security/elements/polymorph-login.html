@@ -1,9 +1,9 @@
 <!--suppress HtmlUnknownTarget, JSUnresolvedFunction, JSUnusedGlobalSymbols -->
 <link rel="import" href="../../../../../../bower_components/polymer/polymer.html"/>
-<link rel="import" href="../../../../../../bower_components/iron-form/iron-form.html"/>
 <link rel="import" href="../../../../../../bower_components/paper-input/paper-input.html"/>
 <link rel="import" href="../../../../../../bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="../../../../../../bower_components/iron-collapse/iron-collapse.html"/>
+<link rel="import" href="../../../../../../bower_components/iron-ajax/iron-ajax.html"/>
 
 <dom-module id="polymorph-login">
     <template>
@@ -38,17 +38,19 @@
 
         </style>
 
-        <form is="iron-form" name="login" id="login" method="POST" action="[[action]]">
+        <iron-ajax id="api" url="[[action]]" method="POST" handle-as="json" on-response="onResponse"></iron-ajax>
+
+        <form name="login" id="login" method="POST" action="[[action]]" on-submit="onNativeSubmit">
             <input type="hidden" name="token" value="[[token]]"/>
             <input id="hidden-submit" type="submit"/>
-            <paper-input name="username" label="[[usernameLabel]]" required auto-validate autocomplete></paper-input>
+            <paper-input name="username" label="[[usernameLabel]]" required autocomplete></paper-input>
             <paper-input name="password" label="[[passwordLabel]]" type="password" autocomplete></paper-input>
             <iron-collapse id="failed">
                 <div class="login-error">
                     [[errorText]]
                 </div>
             </iron-collapse>
-            <paper-button raised on-click="submitForm">[[buttonLabel]]</paper-button>
+            <paper-button raised on-click="doLogin">[[buttonLabel]]</paper-button>
         </form>
     </template>
 
@@ -83,26 +85,17 @@
                 }
             },
 
-            ready: function () {
-                var self = this;
-                this.$.login.addEventListener('iron-form-response', function(event) {
-                    self.onResponse.call(self, event.detail.response);
-                });
+            onNativeSubmit: function (event) {
+                event.preventDefault();
+                clearTimeout(this.resetTO);
+                this.doLogin();
             },
 
-            /**
-             * Submits the form via proper submit button so that native behavior kicks in (password saving on FF etc.)
-             */
-            submitForm: function () {
-                var form = this.$.login;
-                if (form.validate()) {
-                    clearTimeout(this.resetTO);
-                    form.querySelector('#hidden-submit').click();
-                }
-            },
-
-            onResponse: function (response) {
+            onResponse: function () {
                 var self = this;
+                //noinspection JSUnresolvedVariable
+                var response = this.$.api.lastResponse;
+
                 if (response.success) {
                     window.location.reload(true);
                 } else {
@@ -111,8 +104,21 @@
                         self.$.failed.set('opened', false);
                     }, 3000);
                 }
-            }
+            },
 
+            doLogin: function () {
+                var self = this;
+                var fields = ['token', 'username', 'password'];
+                var data = {};
+                fields.forEach(function(fieldName) {
+                    var $field = self.$$('[name="' + fieldName + '"]');
+                    data[fieldName] = $field.value;
+                });
+                //noinspection JSUnresolvedVariable
+                this.$.api.set('params', data);
+                //noinspection JSUnresolvedVariable
+                this.$.api.generateRequest();
+            }
         });
     </script>
 
