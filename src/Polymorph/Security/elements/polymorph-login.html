@@ -110,25 +110,37 @@
             },
 
             ready: function () {
-                var self = this;
                 this.$form = this.$$('#login');
                 this.$fakeForm = this.$$('#fake-login');
+                this.moveFakeForm();
+                this.activateForm();
+            },
+
+            /**
+             * Moves the `fake-login` form out of shadow dom, so that Chrome can save and restore the password
+             */
+            moveFakeForm: function () {
                 this.async(function () {
-                    // move `user-pass` form out of shadow dom, so that Chrome saves the password
                     Polymer.dom(this).parentNode.appendChild(this.$fakeForm);
+                }, 500);
+            },
+
+            activateForm: function () {
+                var self = this;
+                var $username = this.$form.querySelector('[name="username"]');
+                var $fakeUsername = this.$fakeForm.querySelector('[name="username"]');
+                // submit form on ENTER
+                this.addEventListener("keypress", function(event) {
+                    if (event.keyCode === 13) {
+                        self.doLogin();
+                    }
+                }, false);
+                this.async(function () {
                     // inherit saved password
-                    var $username = this.$form.querySelector('[name="username"]');
-                    var $fakeUsername = this.$fakeForm.querySelector('[name="username"]');
                     $username.value = $fakeUsername.value;
                     // focus username field
                     $username.focus();
-                    // submit on enter
-                    this.addEventListener("keypress", function(event) {
-                        if (event.keyCode === 13) {
-                            self.doLogin();
-                        }
-                    }, false);
-                }, 500);
+                }, 1000);
             },
 
             onSubmit: function (event) {
