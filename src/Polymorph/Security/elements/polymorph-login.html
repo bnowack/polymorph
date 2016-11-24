@@ -1,9 +1,22 @@
-<!--suppress HtmlUnknownTarget, JSUnresolvedFunction, JSUnusedGlobalSymbols -->
+<!--suppress HtmlUnknownTarget, JSUnresolvedFunction, JSUnusedGlobalSymbols
+@see http://stackoverflow.com/q/2382329
+@see http://stackoverflow.com/q/21191336
+-->
+
+<!-- elements -->
 <link rel="import" href="../../../../../../bower_components/polymer/polymer.html"/>
 <link rel="import" href="../../../../../../bower_components/paper-input/paper-input.html"/>
 <link rel="import" href="../../../../../../bower_components/paper-button/paper-button.html"/>
 <link rel="import" href="../../../../../../bower_components/iron-collapse/iron-collapse.html"/>
 <link rel="import" href="../../../../../../bower_components/iron-ajax/iron-ajax.html"/>
+
+<!-- global styles -->
+<style>
+    #fake-login{
+        position: fixed;
+        left: 200%;
+    }
+</style>
 
 <dom-module id="polymorph-login">
     <template>
@@ -17,34 +30,43 @@
                 margin: 0 auto;
             }
 
+            #fake-login{
+                position: fixed;
+                left: 200%;
+            }
+
             paper-button {
                 display: block;
                 margin: 16px 0 0 0;
                 padding: 6px 8px;
-                background-color: var(--polymorph-app-link-color);
                 color: #fff;
+                background-color: var(--polymorph-login-primary-color);
             }
 
+            /*noinspection CssUnusedSymbol*/
             .login-error {
-                color: var(--polymorph-app-error-color);
+                color: var(--polymorph-login-error-color);
                 padding: 16px 8px;
                 font-size: 0.85em;
                 font-family: var(--polymorph-login-font, 'sans-serif');
             }
 
-            #hidden-submit {
-                display: none;
-            }
-
         </style>
 
-        <iron-ajax id="api" url="[[action]]" method="POST" handle-as="json" on-response="onResponse"></iron-ajax>
 
-        <form name="login" id="login" method="POST" action="[[action]]" on-submit="onNativeSubmit">
+        <form name="fake-login" id="fake-login" method="POST" action="" on-submit="onFakeSubmit">
+            <!--suppress HtmlFormInputWithoutLabel -->
+            <input name="username" value="{{username}}" type="text" autocomplete />
+            <!--suppress HtmlFormInputWithoutLabel -->
+            <input name="password" value="{{password}}" type="password" autocomplete />
+            <input id="fake-login-submit" type="submit" value="login"/>
+        </form>
+
+        <form name="login" id="login" method="POST" action="[[action]]" on-submit="onSubmit">
             <input type="hidden" name="token" value="[[token]]"/>
-            <input id="hidden-submit" type="submit"/>
-            <paper-input name="username" label="[[usernameLabel]]" required autocomplete></paper-input>
-            <paper-input name="password" label="[[passwordLabel]]" type="password" autocomplete></paper-input>
+            <paper-input name="username" value="{{username}}" label="[[usernameLabel]]" required autocomplete></paper-input>
+            <paper-input name="password" value="{{password}}"  label="[[passwordLabel]]" type="password" autocomplete="current-password"></paper-input>
+
             <iron-collapse id="failed">
                 <div class="login-error">
                     [[errorText]]
@@ -52,6 +74,8 @@
             </iron-collapse>
             <paper-button raised on-click="doLogin">[[buttonLabel]]</paper-button>
         </form>
+
+        <iron-ajax id="api" url="[[action]]" method="POST" handle-as="json" on-response="onResponse"></iron-ajax>
     </template>
 
     <script>
@@ -85,18 +109,70 @@
                 }
             },
 
-            onNativeSubmit: function (event) {
+            ready: function () {
+                var self = this;
+                this.$form = this.$$('#login');
+                this.$fakeForm = this.$$('#fake-login');
+                this.async(function () {
+                    // move `user-pass` form out of shadow dom, so that Chrome saves the password
+                    Polymer.dom(this).parentNode.appendChild(this.$fakeForm);
+                    // inherit saved password
+                    var $username = this.$form.querySelector('[name="username"]');
+                    var $fakeUsername = this.$fakeForm.querySelector('[name="username"]');
+                    $username.value = $fakeUsername.value;
+                    // focus username field
+                    $username.focus();
+                    // submit on enter
+                    this.addEventListener("keypress", function(event) {
+                        if (event.keyCode === 13) {
+                            self.doLogin();
+                        }
+                    }, false);
+                }, 500);
+            },
+
+            onSubmit: function (event) {
                 event.preventDefault();
                 clearTimeout(this.resetTO);
                 this.doLogin();
+            },
+
+            onFakeSubmit: function (event) {
+                event.preventDefault();
+            },
+
+            doLogin: function () {
+                this.debounce('doLogin', function () {
+                    var body = this.getLoginRequestBody();
+                    //noinspection JSUnresolvedVariable
+                    this.$.api.set('body', body);
+                    //noinspection JSUnresolvedVariable
+                    this.$.api.generateRequest();
+                }, 100);
+            },
+
+            getLoginRequestBody: function () {
+                var self = this;
+                var params = [];
+                var fields = ['token', 'username', 'password'];
+                fields.forEach(function(fieldName) {
+                    var fieldValue = self.$form.querySelector('[name="' + fieldName + '"]').value;
+                    params.push(encodeURIComponent(fieldName) + '=' +  encodeURIComponent(fieldValue));
+                });
+                return params.join('&');
             },
 
             onResponse: function () {
                 var self = this;
                 //noinspection JSUnresolvedVariable
                 var response = this.$.api.lastResponse;
-
+                if (!response) {
+                    return;
+                }
                 if (response.success) {
+                    // trigger password-saving in non-chrome browsers
+                    this.$fakeForm.querySelector('#fake-login-submit').click();
+                    // trigger password-saving in chrome
                     window.location.reload(true);
                 } else {
                     this.$.failed.set('opened', true);
@@ -104,20 +180,6 @@
                         self.$.failed.set('opened', false);
                     }, 3000);
                 }
-            },
-
-            doLogin: function () {
-                var self = this;
-                var fields = ['token', 'username', 'password'];
-                var data = {};
-                fields.forEach(function(fieldName) {
-                    var $field = self.$$('[name="' + fieldName + '"]');
-                    data[fieldName] = $field.value;
-                });
-                //noinspection JSUnresolvedVariable
-                this.$.api.set('params', data);
-                //noinspection JSUnresolvedVariable
-                this.$.api.generateRequest();
             }
         });
     </script>
