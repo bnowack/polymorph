@@ -155,12 +155,12 @@ class Application extends SilexApplication
      * To stream a view, pass an instance of StreamedResponse as a third argument.
      *
      * @param string $view The view name
-     * @param array $parameters An array of parameters to pass to the view
+     * @param array|\stdClass $parameters A set of parameters to pass to the view
      * @param Response $response A Response instance
      *
      * @return Response A Response instance
      */
-    public function render($view, array $parameters = array(), Response $response = null)
+    public function render($view, $parameters = array(), Response $response = null)
     {
         $templateParameters = $this->buildTemplateParameters($parameters);
         return $this->twigRender($view, $templateParameters, $response);
