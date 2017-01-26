@@ -13,21 +13,6 @@ class ApplicationController
 {
 
     /**
-     * Generates a `manifest.json` response
-     *
-     * @param Application $app
-     *
-     * @return Response A Response instance
-     */
-    public function handleManifestRequest(Application $app)
-    {
-        $template = $app->config('templates')->manifest;
-        $response = $app->render($template);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-
-    /**
      * Generates an error response
      *
      * @param Application $app
@@ -62,19 +47,19 @@ class ApplicationController
     }
 
     /**
-     * Generates a (default) welcome response
+     * Generates a content template response
      *
      * @param Application $app
+     * @param \stdClass $routeOptions The route definition as specified in the configuration file
      *
      * @return Response A Response instance
      */
-    public function handleHomeRequest(Application $app)
+    public function handleTemplateRequest(Application $app, $routeOptions = null)
     {
-        $params = [
-            'pageTitle' => 'Welcome',
-            'content' => 'Welcome to Polymorph'
-        ];
-        $template = $app->config('templates')->content;
-        return $app->render($template, $params);
+        $response = $app->render($routeOptions->template, $routeOptions);
+        // set content type
+        if (isset($routeOptions->contentType)) {
+            $response->headers->set('Content-Type', $routeOptions->contentType);
+        }
     }
 }
