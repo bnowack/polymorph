@@ -3,9 +3,17 @@
     "/test-base/",
     "/"
   ],
-  "routes": {
-    "/secured-test": "\\Polymorph\\Security\\SecurityController::handleSecuredRequest"
-  },
   "dataDirectory": "dev/data",
-  "adminAccount": "admin"
+  "adminAccount": "admin",
+  "routes": {
+    "/secured": {
+      "id": "secured",
+      "call": "Polymorph\\Application\\ApplicationController::handleTemplateRequest",
+      "template": "Polymorph/Application/templates/content.html.twig",
+      "pageTitle": "Secured area",
+      "content": "Access granted",
+      "role": "admin",
+      "errorMessage": "Access Denied"
+    }
+  }
 }

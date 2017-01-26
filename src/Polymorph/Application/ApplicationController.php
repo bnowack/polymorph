@@ -56,6 +56,11 @@ class ApplicationController
      */
     public function handleTemplateRequest(Application $app, $routeOptions = null)
     {
+        // check role
+        if (!empty($routeOptions->role) && !$app['users']->hasRole($routeOptions->role)) {
+            $app->abort(401, $routeOptions->errorMessage);
+        }
+
         $response = $app->render($routeOptions->template, $routeOptions);
         // set content type
         if (isset($routeOptions->contentType)) {

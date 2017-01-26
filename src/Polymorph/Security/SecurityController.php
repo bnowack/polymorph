@@ -15,26 +15,6 @@ class SecurityController
 {
 
     /**
-     * Dummy method for illustrating the use of `hasRole`
-     *
-     * @param Application $app
-     * @return string
-     */
-    public function handleSecuredRequest(Application $app)
-    {
-        // render login form if user lacks permissions
-        if (!$app['users']->hasRole('admin')) {
-            return $app['security']->renderLoginForm();
-        }
-        $params = [
-            'pageTitle' => 'Access granted',
-            'content' => 'Welcome, ' . $app['users']->getCurrentUser()->getUsername()
-        ];
-        $template = $app->config('templates')->content;
-        return $app->render($template, $params);
-    }
-
-    /**
      * Serves a login form
      *
      * @param Application $app Application instance
