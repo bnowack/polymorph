@@ -33,7 +33,6 @@
   "startupBgColor": "#fff",
   "routes": {
     "/": "\\Polymorph\\Application\\ApplicationController::handleHomeRequest",
-    "/schema-versions": "\\Polymorph\\Schema\\SchemaController::handleSchemaVersionsRequest",
     "/login": "\\Polymorph\\Security\\SecurityController::handleLoginRequest"
     ,
 
@@ -41,6 +40,13 @@
       "call": "Polymorph\\Application\\ApplicationController::handleTemplateRequest",
       "template": "Polymorph/Application/templates/manifest.json.twig",
       "contentType": "application/json"
+    },
+
+    "/polymorph/schema/versions": {
+      "call": "Polymorph\\Schema\\SchemaController::handleSchemaVersionsRequest",
+      "template": "Polymorph/Application/templates/content.html.twig",
+      "pageTitle": "Schema Versions",
+      "heading": "Applied Schema Versions"
     }
   },
   "dataDirectory": "data",

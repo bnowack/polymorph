@@ -16,22 +16,19 @@ class SchemaController
      * Checks/Updates the schema an generates a list of applied versions
      *
      * @param Application $app
+     * @param \stdClass $routeOptions The route definition as specified in the configuration file
+     *
      * @return Response
      */
-    public function handleSchemaVersionsRequest(Application $app)
+    public function handleSchemaVersionsRequest(Application $app, $routeOptions)
     {
         $appliedVersions = $app['schema']->checkSchema();
-        $params = [
-            'pageTitle' => 'Schema Versions',
-            'content' => '
-                <h2>Applied Schema Versions</h2>
-                <ul>
-                    <li>' . join('</li><li>', $appliedVersions) . '</li>
-                </ul>
-            '
-        ];
-        $template = $app->config('templates')->content;
-        return $app->render($template, $params);
+        $routeOptions->content = "
+            <h2>$routeOptions->heading</h2>
+            <ul>
+                <li>" . join('</li><li>', $appliedVersions) . "</li>
+            </ul>
+        ";
+        return $app->render($routeOptions->template, $routeOptions);
     }
-
 }
