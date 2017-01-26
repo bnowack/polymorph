@@ -124,9 +124,16 @@ class Application extends SilexApplication
     public function initRoutes()
     {
         $routes = $this->config('routes', array());
-        foreach ($routes as $path => $handler) {
+        foreach ($routes as $path => $routeOptions) {
             $pathWithBase = $this->base . ltrim($path, '/');
-            $this->match($pathWithBase, $handler);
+            if (is_string($routeOptions)) {// routeOptions is a `Class::method` string
+                $this->match($pathWithBase, $routeOptions);
+            } else {// routeOptions is an object (and should have a 'call' property)
+                /* Silex\Controller $controller */
+                $controller = $this->match($pathWithBase, $routeOptions->call);
+                // make route options available as controller call parameter
+                $controller->value('routeOptions', $routeOptions);
+            }
         }
     }
 
