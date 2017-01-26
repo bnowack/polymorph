@@ -134,11 +134,11 @@ class Application extends SilexApplication
      * Renders errors
      *
      * @param \Exception $exception Exception instance
-     * @param string|integer $code Error code
+     * @param integer $code Error code
      *
      * @return Response
      */
-    public function onError(\Exception $exception, $code = 'Error')
+    public function onError(\Exception $exception, $code = 500)
     {
         $controller = new ApplicationController();
         $method = "handle{$code}Request";
