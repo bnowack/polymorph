@@ -23,12 +23,13 @@ class SchemaController
     public function handleSchemaVersionsRequest(Application $app, $routeOptions)
     {
         $appliedVersions = $app['schema']->checkSchema();
-        $routeOptions->content = "
-            <h2>$routeOptions->heading</h2>
-            <ul>
-                <li>" . join('</li><li>', $appliedVersions) . "</li>
-            </ul>
-        ";
+        // render versions as simple list
+        $elementPath = "bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-simple-list.html";
+        $routeOptions->element = $elementPath;
+        $routeOptions->elementData = [
+            'heading' => $routeOptions->heading,
+            'items' => $appliedVersions
+        ];
         return $app->render($routeOptions->template, $routeOptions);
     }
 }
