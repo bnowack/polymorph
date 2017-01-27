@@ -10,7 +10,11 @@
 
 {% block view %}
 
-    <polymorph-page class="polymorph-partial" path="{{ view.path }}">
+    <polymorph-page
+            class="polymorph-partial"
+            path="{{ view.path }}"
+            element="{{ element }}"
+            element-data="{{ elementData|json_encode }}">
         {{ content|raw }}
     </polymorph-page>
 

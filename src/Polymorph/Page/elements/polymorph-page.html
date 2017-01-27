@@ -27,15 +27,18 @@
                 path: {
                     type: String,
                     reflectToAttribute: true
-                }
+                },
+                element: String,
+                elementData: Object
             },
 
             attached: function () {
-                this.listen(document.body.querySelector('polymorph-app'), 'polymorph-page.loaded', 'onLoaded')
+                this.checkElement();
+                this.listen(document.body.querySelector('polymorph-app'), 'polymorph-page.loaded', 'onLoaded');
             },
 
             detached: function () {
-                this.unlisten(document.body.querySelector('polymorph-app'), 'polymorph-page.loaded', 'onLoaded')
+                this.unlisten(document.body.querySelector('polymorph-app'), 'polymorph-page.loaded', 'onLoaded');
             },
 
             /**
@@ -47,15 +50,41 @@
             onLoaded: function (event, data) {
                 /** @type {HTMLElement} */
                 var $partial = data.$partial;
-                // update path property
-                var path = $partial.getAttribute('path');// can't use $partial.path because the partial is not activated
-                this.set('path', path);
+                // set properties (can't use $partial.PROPERTY because the partial is not initialized in this context)
+                this.set('path', $partial.getAttribute('path'));
+                this.set('element', $partial.getAttribute('element'));
+                this.set('elementData', JSON.parse($partial.getAttribute('elementData')));
                 // replace all contents
                 Polymer.dom(this).innerHTML = $partial.innerHTML;
                 // activate script tags
                 Polymer.dom(this).querySelectorAll('script').forEach(function (script) {
                     eval(script.innerHTML);
                 });
+            },
+
+            /**
+             * Checks if a to-be-appended element is defined
+             */
+            checkElement: function () {
+                if (this.element) {
+                    this.importHref(this.element, this.appendElement);
+                }
+            },
+
+            /**
+             * Appends an element defined as property
+             */
+            appendElement: function () {
+                var elementName = this.element.replace(/^.*\/([^\/]+)\.html.*$/, '$1');
+                var $element = document.createElement(elementName);
+                Polymer.dom(this).appendChild($element);
+                // set element data
+                var elementData = this.elementData || {};
+                for (var name in elementData) {
+                    if (elementData.hasOwnProperty(name)) {
+                        $element.set(name, elementData[name]);
+                    }
+                }
             }
         });
 
