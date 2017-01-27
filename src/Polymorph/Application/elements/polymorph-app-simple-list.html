@@ -1,0 +1,33 @@
+<!--suppress JSUnusedGlobalSymbols, JSUnresolvedVariable, HtmlUnknownTarget -->
+<!-- elements -->
+<link rel="import" href="../../../../../../bower_components/polymer/polymer.html"/>
+
+<dom-module id="polymorph-app-simple-list">
+    <template>
+
+        <template is="dom-if" if="heading">
+            <h3>{{heading}}</h3>
+        </template>
+
+        <ul>
+            <template is="dom-repeat" items="{{items}}">
+                <li>{{item}}</li>
+            </template>
+        </ul>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            // register element
+            is: 'polymorph-app-simple-list',
+
+            properties: {
+                heading: String,
+                items: Array
+            }
+        });
+    </script>
+
+</dom-module>
