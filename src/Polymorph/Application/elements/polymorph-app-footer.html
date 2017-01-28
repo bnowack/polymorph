@@ -1,7 +1,9 @@
-<!-- polymorph-app-footer -->
-
 <!--suppress JSUnusedGlobalSymbols, JSUnresolvedVariable, HtmlUnknownTarget -->
-<link rel="import" href="../../../../../../bower_components/iron-ajax/iron-ajax.html"/>
+
+<!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
+<link rel="import" href="../../../../../polymer/polymer.html"/>
+<link rel="import" href="../../../../../iron-ajax/iron-ajax.html"/>
+<!-- `shared-styles` are project-specific and get imported by the page template -->
 
 <dom-module id="polymorph-app-footer">
     <template>
@@ -31,18 +33,16 @@
             :host .version {
                 font-size: 0.9em;
             }
-
         </style>
 
-        <iron-ajax id="bower" auto url="../../../../bower.json" handle-as="json" on-response="onBowerJsonLoaded"></iron-ajax>
+        <iron-ajax auto url="{{manifestHref}}" handle-as="json" last-response="{{manifest}}"></iron-ajax>
 
         <footer>
             powered by <a href="https://github.com/bnowack/polymorph">Polymorph</a>
-            <template is="dom-if" if="{{version}}">
-                (<span class="version">v{{version}}</span>)
+            <template is="dom-if" if="{{manifest.version}}">
+                <span class="version">v{{manifest.version}}</span>
             </template>
         </footer>
-
     </template>
 
     <script>
@@ -51,16 +51,12 @@
             is: 'polymorph-app-footer',
 
             properties: {
-                version: {
+                manifestHref: {
                     type: String,
-                    value: ''
-                }
-            },
-
-            onBowerJsonLoaded: function () {
-                this.set('version', this.$.bower.lastResponse.version || null);
+                    value: window.base + 'manifest.json'
+                },
+                manifest: Object
             }
-
         });
     </script>
 
