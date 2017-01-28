@@ -96,7 +96,7 @@
                 },
                 action: {
                     type: String,
-                    value: window.base + 'login'
+                    value: window.location.href
                 },
                 errorText: {
                     type: String,
@@ -106,6 +106,10 @@
                     type: Boolean,
                     value: false,
                     notify: true
+                },
+                targetHref: {
+                    type: String,
+                    value: window.base
                 }
             },
 
@@ -175,23 +179,32 @@
             },
 
             onResponse: function () {
-                var self = this;
                 //noinspection JSUnresolvedVariable
                 var response = this.$.api.lastResponse;
                 if (!response) {
                     return;
                 }
                 if (response.success) {
-                    // trigger password-saving in non-chrome browsers
-                    this.$fakeForm.querySelector('#fake-login-submit').click();
-                    // trigger password-saving in chrome
-                    window.location.reload(true);
+                    this.onSuccess();
                 } else {
-                    this.$.failed.set('opened', true);
-                    this.resetTO = setTimeout(function () {
-                        self.$.failed.set('opened', false);
-                    }, 3000);
+                    this.onFail();
                 }
+            },
+
+            onSuccess: function () {
+                // trigger password-saving in non-chrome browsers
+                this.$fakeForm.querySelector('#fake-login-submit').click();
+                // trigger password-saving in chrome
+                window.location.href = this.targetHref;
+            },
+
+            onFail: function () {
+                var self = this;
+                // show error message for 3 seconds
+                this.$.failed.set('opened', true);
+                this.resetTO = setTimeout(function () {
+                    self.$.failed.set('opened', false);
+                }, 3000);
             }
         });
     </script>
