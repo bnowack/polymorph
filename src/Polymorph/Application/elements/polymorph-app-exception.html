@@ -1,7 +1,9 @@
-<!-- polymorph-exception -->
+<!--suppress HtmlUnknownTarget, JSUnresolvedVariable, JSUnusedGlobalSymbols -->
 
-<link rel="import" href="../../../../../../bower_components/polymer/polymer.html"/>
-<link rel="import" href="../../../../../../bower_components/paper-card/paper-card.html"/>
+<!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
+<link rel="import" href="../../../../../polymer/polymer.html"/>
+<link rel="import" href="../../../../../paper-card/paper-card.html"/>
+<!-- `shared-styles` are project-specific and get imported by the page template -->
 
 <dom-module id="polymorph-app-exception">
     <template>
@@ -22,13 +24,7 @@
                     font-size: 16px;
                     color: var(--polymorph-app-error-color);
                 };
-
-                --paper-card-content: {
-
-                };
-
             }
-
 
             :host ::content ul.trace {
                 margin: 0;
@@ -38,7 +34,6 @@
             :host ::content .file {
                 border-bottom: 1px dotted #333;
             }
-
         </style>
         <paper-card heading="{{message}}">
             <div class="card-content"><content></content></div>
@@ -47,8 +42,6 @@
 
     <script>
         Polymer({
-
-            // register element
             is: 'polymorph-app-exception',
 
             properties: {
@@ -74,7 +67,6 @@
                     el.textContent = el.textContent.replace(/^.*\/([^\/]+)/, '$1');
                 })
             }
-
         });
     </script>
 

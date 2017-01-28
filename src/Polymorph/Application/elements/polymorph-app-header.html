@@ -1,5 +1,8 @@
-<!-- polymorph-app-header -->
 
+<!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
+<link rel="import" href="../../../../../polymer/polymer.html"/>
+<!-- `shared-styles` are project-specific and get imported by the page template -->
+<!-- behaviors -->
 <link rel="import" href="../element-behaviors/fade-in.html"/>
 
 <dom-module id="polymorph-app-header">
@@ -28,24 +31,19 @@
         <header>
             <a href="[[base]]"></a>
         </header>
-
     </template>
 
     <script>
         Polymer({
 
-            // register element
             is: 'polymorph-app-header',
+
+            behaviors: [polymorphFadeIn],
 
             properties: {
                 base: String
-            },
-
-            behaviors: [polymorphFadeIn]
-
+            }
         });
     </script>
 
 </dom-module>
-
-
