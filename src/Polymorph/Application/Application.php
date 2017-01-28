@@ -211,6 +211,7 @@ class Application extends SilexApplication
             "icons" => (array)$this->config('icons'),
             "templates" => (array)$this->config('templates'),
             "startupBgColor" => $this->config('startupBgColor'),
+            "sharedStylesHref" => $this->config('sharedStylesHref'),
             "request" => $request,
             "view" => [
                 "path" => $request->getPathInfo()
