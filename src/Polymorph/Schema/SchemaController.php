@@ -23,9 +23,7 @@ class SchemaController
     public function handleSchemaVersionsRequest(Application $app, $routeOptions)
     {
         $appliedVersions = $app['schema']->checkSchema();
-        // render versions as simple list
-        $elementPath = "bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-simple-list.html";
-        $routeOptions->element = $elementPath;
+        // render versions (usually via simple list element)
         $routeOptions->elementData = [
             'heading' => $routeOptions->heading,
             'items' => $appliedVersions
