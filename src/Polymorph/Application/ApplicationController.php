@@ -66,5 +66,6 @@ class ApplicationController
         if (isset($routeOptions->contentType)) {
             $response->headers->set('Content-Type', $routeOptions->contentType);
         }
+        return $response;
     }
 }
