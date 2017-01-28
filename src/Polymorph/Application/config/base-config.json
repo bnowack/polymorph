@@ -32,6 +32,12 @@
   },
   "startupBgColor": "#fff",
   "sharedStylesHref": "bower_components/polymorph/src/Polymorph/Application/elements/shared-styles.html",
+  "dataDirectory": "data",
+  "dbs": {
+    "schema": { "driver": "pdo_sqlite" },
+    "users": { "driver": "pdo_sqlite" }
+  },
+  "adminAccount": "",
   "routes": {
     "/login": "\\Polymorph\\Security\\SecurityController::handleLoginRequest"
     ,
@@ -53,11 +59,5 @@
       "pageTitle": "Schema Versions",
       "heading": "Applied Schema Versions"
     }
-  },
-  "dataDirectory": "data",
-  "dbs": {
-    "schema": { "driver": "pdo_sqlite" },
-    "users": { "driver": "pdo_sqlite" }
-  },
-  "adminAccount": ""
+  }
 }
