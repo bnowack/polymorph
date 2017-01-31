@@ -80,6 +80,11 @@
         "errorText": "Wrong email or password. Please try again",
         "targetHref": "/"
       }
+    },
+
+    "/polymorph/account/logout": {
+      "call": "Polymorph\\Security\\LogoutController::handleLogoutRequest",
+      "targetHref": "/"
     }
   }
 }
