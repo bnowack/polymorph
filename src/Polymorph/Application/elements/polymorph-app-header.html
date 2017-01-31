@@ -1,3 +1,4 @@
+<!--suppress HtmlUnknownTarget -->
 
 <!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
 <link rel="import" href="../../../../../polymer/polymer.html"/>
@@ -26,9 +27,16 @@
                 background: transparent url("../img/favicon.png") center no-repeat;
                 background-size: 32px 32px;
             }
+
+            #sys-nav {
+                position: absolute;
+                right: 16px;
+                padding-top: 4px;
+            }
         </style>
 
         <header>
+            <div id="sys-nav"></div>
             <a href="[[base]]"></a>
         </header>
     </template>
@@ -41,7 +49,23 @@
             behaviors: [polymorphFadeIn],
 
             properties: {
-                base: String
+                base: {
+                    type: String,
+                    value: window.base
+                }
+            },
+
+            attached: function () {
+                this.async(this.loadSysNav, 1000);
+            },
+
+            loadSysNav: function () {
+                var href = "polymorph-app-sys-nav.html";
+                this.importHref(this.resolveUrl(href), this.renderSysNav);
+            },
+
+            renderSysNav: function () {
+                this.$$('#sys-nav').appendChild(document.createElement('polymorph-app-sys-nav'));
             }
         });
     </script>
