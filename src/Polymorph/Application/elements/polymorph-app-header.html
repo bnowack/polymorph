@@ -5,6 +5,7 @@
 <!-- `shared-styles` are project-specific and get imported by the page template -->
 <!-- behaviors -->
 <link rel="import" href="../element-behaviors/fade-in.html?0.1.14"/>
+<link rel="import" href="../element-behaviors/lazyloading.html?0.1.14"/>
 
 <dom-module id="polymorph-app-header">
     <template>
@@ -46,7 +47,10 @@
 
             is: 'polymorph-app-header',
 
-            behaviors: [polymorphFadeIn],
+            behaviors: [
+                polymorphFadeIn,
+                polymorphLazyloading
+            ],
 
             properties: {
                 base: {
@@ -56,16 +60,15 @@
             },
 
             attached: function () {
-                this.async(this.loadSysNav, 1000);
+                this.async(this.loadSysNav, 100);
             },
 
             loadSysNav: function () {
                 var href = "polymorph-app-sys-nav.html";
-                this.importHref(this.resolveUrl(href), this.renderSysNav);
-            },
-
-            renderSysNav: function () {
-                this.$$('#sys-nav').appendChild(document.createElement('polymorph-app-sys-nav'));
+                var self = this;
+                this.lazyload([href]).then(function () {
+                    self.$$('#sys-nav').appendChild(document.createElement('polymorph-app-sys-nav'));
+                });
             }
         });
     </script>
