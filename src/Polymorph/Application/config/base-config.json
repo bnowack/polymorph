@@ -60,6 +60,14 @@
       "heading": "Applied Schema Versions"
     },
 
+    "polymorph/account.json": {
+      "call": "Polymorph\\Security\\SecurityController::handleAccountInfoRequest",
+      "loginHref": "/polymorph/account/login",
+      "loginLabel": "Sign in",
+      "logoutHref": "/polymorph/account/logout",
+      "logoutLabel": "Sign out"
+    },
+
     "/polymorph/account/login": {
       "call": "Polymorph\\Security\\LoginController::handleLoginRequest",
       "template": "Polymorph/Application/templates/content.html.twig",
