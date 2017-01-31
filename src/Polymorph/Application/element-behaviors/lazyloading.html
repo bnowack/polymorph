@@ -26,6 +26,10 @@
             return new Promise(function (resolve, reject) {
                 var queueSize = elements.length;
                 elements.forEach(function (path) {
+                    // append cache id
+                    if (!path.match(/\?/)) {
+                        path += '?' + window.Polymorph.appVersion;
+                    }
                     var elementName = path.replace(/^.*\/([^\/]+)\.html.*$/, '$1');
                     self.importHref(self.resolveUrl(path), function () {
                         queueSize--;
