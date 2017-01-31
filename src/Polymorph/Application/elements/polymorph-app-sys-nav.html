@@ -1,0 +1,214 @@
+<!--suppress HtmlUnknownTarget, CssUnusedSymbol -->
+
+<!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
+<link rel="import" href="../../../../../polymer/polymer.html"/>
+<link rel="import" href="../../../../../iron-ajax/iron-ajax.html"/>
+<link rel="import" href="../../../../../neon-animation/animations/fade-in-animation.html"/>
+<link rel="import" href="../../../../../neon-animation/animations/fade-out-animation.html"/>
+<link rel="import" href="../../../../../paper-dialog/paper-dialog.html"/>
+<link rel="import" href="../../../../../iron-icon/iron-icon.html"/>
+<link rel="import" href="../../../../../iron-icons/iron-icons.html"/>
+<!-- `shared-styles` are project-specific and get imported by the page template -->
+
+<dom-module id='polymorph-app-sys-nav'>
+    <template>
+        <style include="shared-styles">
+
+            /* element styles */
+
+            :host {
+                position: relative;
+                font-family: var(--polymorph-app-sys-nav-font, sans-serif);
+                text-align: left;
+            }
+
+            /* link styles */
+
+            a.toggle, a.login {
+                font-family: var(--polymorph-app-sys-nav-toggle-font, sans-serif);
+                font-size: 0.9em;
+                font-weight: 600;
+                text-decoration: none;
+                color: var(--polymorph-app-sys-nav-toggle-color);
+                cursor: pointer;
+            }
+
+            a.toggle:after {
+                content: "";
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                background: transparent url("../img/expand.png") right bottom no-repeat;
+            }
+
+            a.toggle:hover {
+                opacity: 0.8;
+            }
+
+            /* popup styles */
+
+            .popup {
+                position: absolute;
+                top: 12px;
+                right: -40px;
+                width: 300px;
+                max-width: 300px !important;
+                box-shadow: 0 0 21px rgba(0, 0, 0, 0.3);
+                font-family: var(--polymorph-app-sys-nav-popup-font, sans-serif);
+            }
+
+            .popup::before {
+                content: '';
+                display: block;
+                border: 8px solid transparent;
+                border-bottom-color: #fff;
+                position: absolute;
+                right: 10px;
+                top: -15px;
+            }
+
+            ul {
+                margin: 0 !important;
+                padding: 0 !important;
+                list-style-type: none;
+            }
+
+            li {
+                font-size: 16px;
+                line-height: 1.5;
+                position: relative;
+            }
+
+            li + li {
+                border-top: 1px solid #eee;
+            }
+
+            li > * {
+                padding: 8px 16px 6px 16px;
+            }
+
+            li a {
+                display: block;
+                color: var(--polymorph-app-sys-nav-link-color);
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            li a:hover {
+                background-color: #eee;
+            }
+
+            li span {
+                display: block;
+            }
+
+            .main-info {
+                font-weight: 500;
+                padding-right: 40px;
+            }
+
+            .sub-info {
+                color: #666;
+                font-size: 0.9em;
+                padding-right: 40px;
+            }
+
+            iron-icon {
+                position: absolute;
+                right: 8px;
+                top: 10px;
+                --iron-icon-width: 20px;
+                --iron-icon-height: 20px;
+            }
+        </style>
+
+        <a class="login" hidden$={{!isGuest(accountInfo)}} href="{{loginUrl}}">
+            {{accountInfo.loginLabel}}
+        </a>
+        <a class="toggle" hidden$={{isGuest(accountInfo)}} on-tap="togglePopup">
+            {{accountInfo.username}}
+        </a>
+        <paper-dialog class="popup no-padding" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+            <ul>
+                <li>
+                    <!--suppress HtmlUnknownTarget -->
+                    <a on-tap="signOut">
+                        <iron-icon icon="exit-to-app"></iron-icon>
+                        <span class="main-info">{{accountInfo.logoutLabel}}</span>
+                    </a>
+                </li>
+            </ul>
+        </paper-dialog>
+
+        <iron-ajax id="account" auto url="{{accountInfoHref}}" handle-as="json" last-response="{{accountInfo}}"></iron-ajax>
+        <iron-ajax id="logout" url="{{logoutUrl}}" handle-as="json" method="POST" on-response="onLogout"></iron-ajax>
+    </template>
+    <script>
+        //noinspection JSUnusedGlobalSymbols
+        Polymer({
+
+            is: "polymorph-app-sys-nav",
+
+            properties: {
+                base: {
+                    type: String,
+                    value: window.base
+                },
+                accountInfoHref: {
+                    type: String,
+                    value: window.base + 'polymorph/account.json'
+                },
+                accountInfo: Object,
+                loginUrl: {
+                    type: String,
+                    computed: 'computeUrl(base, accountInfo.loginHref)'
+                },
+                logoutUrl: {
+                    type: String,
+                    computed: 'computeUrl(base, accountInfo.logoutHref)'
+                }
+            },
+
+            computeUrl: function (base, href) {
+                return base + href.replace(/^\/+/, '');
+            },
+
+            togglePopup: function (event) {
+                event.preventDefault();
+                this.$$('.popup').toggle();
+            },
+
+            /**
+             * Checks if the given user is a guest user
+             *
+             * @param {Object} accountInfo
+             * @param {Array} accountInfo.roles
+             * @return {Boolean} TRUE if guest user, FALSE otherwise
+             */
+            isGuest: function (accountInfo) {
+                return (!accountInfo || !accountInfo.roles.length || accountInfo.roles[0] === 'guest');
+            },
+
+            signOut: function () {
+                //noinspection JSUnresolvedVariable
+                this.$.logout.set('body', encodeURIComponent('token') + '=' +  encodeURIComponent(this.accountInfo.logoutToken));
+                //noinspection JSUnresolvedVariable
+                this.$.logout.generateRequest();
+            },
+
+            onLogout: function () {
+                //noinspection JSUnresolvedVariable
+                var response = this.$.logout.lastResponse;
+                if (!response) {
+                    return;
+                }
+                if (response.success) {
+                    //noinspection JSValidateTypes
+                    window.location.href = response.targetHref;
+                } else {
+                    alert(response.message)
+                }
+            }
+        });
+    </script>
+</dom-module>
