@@ -21,9 +21,12 @@ define("POLYMORPH_SRC_DIR", POLYMORPH_APP_DIR . 'src/');
 // Include autoloader
 require_once POLYMORPH_APP_DIR . 'vendor/autoload.php';
 
-$asset = POLYMORPH_APP_DIR . preg_replace('/(\?.*)$/', '', ltrim($_SERVER['REQUEST_URI'], '/'));
+$asset = POLYMORPH_APP_DIR . ltrim(preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']), '/');
 
-if (is_file($asset)) {// Serve static assets
+if (strpos($asset, 'bower_components/font-roboto/roboto.html') !== false) {
+    return;// don't load roboto font
+}
+else if (is_file($asset)) {// Serve static assets
     return false;
     // compress output
     $output = gzencode(file_get_contents($asset), 9, FORCE_GZIP);
