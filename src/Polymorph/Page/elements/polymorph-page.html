@@ -53,13 +53,14 @@
                 // set properties (can't use $partial.PROPERTY because the partial is not initialized in this context)
                 this.set('path', $partial.getAttribute('path'));
                 this.set('element', $partial.getAttribute('element'));
-                this.set('elementData', JSON.parse($partial.getAttribute('elementData')));
+                this.set('elementData', JSON.parse($partial.getAttribute('element-data')));
                 // replace all contents
                 Polymer.dom(this).innerHTML = $partial.innerHTML;
                 // activate script tags
                 Polymer.dom(this).querySelectorAll('script').forEach(function (script) {
                     eval(script.innerHTML);
                 });
+                this.checkElement();
             },
 
             /**
