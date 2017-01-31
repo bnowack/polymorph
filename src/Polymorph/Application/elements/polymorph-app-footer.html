@@ -2,7 +2,6 @@
 
 <!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
 <link rel="import" href="../../../../../polymer/polymer.html"/>
-<link rel="import" href="../../../../../iron-ajax/iron-ajax.html"/>
 <!-- `shared-styles` are project-specific and get imported by the page template -->
 
 <dom-module id="polymorph-app-footer">
@@ -35,13 +34,9 @@
             }
         </style>
 
-        <iron-ajax auto url="{{manifestHref}}" handle-as="json" last-response="{{manifest}}"></iron-ajax>
-
         <footer>
             powered by <a href="https://github.com/bnowack/polymorph">Polymorph</a>
-            <template is="dom-if" if="{{manifest.version}}">
-                <span class="version">v{{manifest.version}}</span>
-            </template>
+            <span class="version">v{{version}}</span>
         </footer>
     </template>
 
@@ -50,11 +45,10 @@
             is: 'polymorph-app-footer',
 
             properties: {
-                manifestHref: {
+                version: {
                     type: String,
-                    value: window.base + 'manifest.json'
-                },
-                manifest: Object
+                    value: window.Polymorph.appVersion
+                }
             }
         });
     </script>
