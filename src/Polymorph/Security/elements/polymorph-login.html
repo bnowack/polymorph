@@ -130,37 +130,67 @@
             moveFakeForm: function () {
                 this.async(function () {
                     Polymer.dom(this).parentNode.appendChild(this.$fakeForm);
-                }, 500);
+                }, 250);
             },
 
+            /**
+             * Activates the form element (submit on enter, autofill)
+             */
             activateForm: function () {
                 var self = this;
-                var $username = this.$form.querySelector('[name="username"]');
-                var $fakeUsername = this.$fakeForm.querySelector('[name="username"]');
                 // submit form on ENTER
-                this.addEventListener("keypress", function(event) {
+                this.addEventListener("keypress", function (event) {
                     if (event.keyCode === 13) {
                         self.doLogin();
                     }
                 }, false);
-                this.async(function () {
+                this.autofillForm();
+            },
+
+            /**
+             * Auto-fills the form with a stored account
+             *
+             * @param loops
+             */
+            autofillForm: function (loops) {
+                loops = loops || 0;
+                var $username = this.$form.querySelector('[name="username"]');
+                var $fakeUsername = this.$fakeForm.querySelector('[name="username"]');
+                if ($fakeUsername.value || loops > 10) {
                     // inherit saved password
                     $username.value = $fakeUsername.value;
                     // focus username field
                     $username.focus();
-                }, 1000);
+                } else {
+                    this.async(function () {
+                        this.autofillForm(loops + 1)
+                    }, 100);
+                }
             },
 
+            /**
+             * Triggers the login form
+             *
+             * @param event
+             */
             onSubmit: function (event) {
                 event.preventDefault();
                 clearTimeout(this.resetTO);
                 this.doLogin();
             },
 
+            /**
+             * Prevents the fake form from getting submitted
+             *
+             * @param event
+             */
             onFakeSubmit: function (event) {
                 event.preventDefault();
             },
 
+            /**
+             * Calls the login API
+             */
             doLogin: function () {
                 this.debounce('doLogin', function () {
                     var body = this.getLoginRequestBody();
@@ -171,6 +201,11 @@
                 }, 100);
             },
 
+            /**
+             * Reads the login data from the form
+             *
+             * @return {String} Login data as POST body
+             */
             getLoginRequestBody: function () {
                 var self = this;
                 var params = [];
@@ -182,6 +217,9 @@
                 return params.join('&');
             },
 
+            /**
+             * Handles login API responses
+             */
             onResponse: function () {
                 //noinspection JSUnresolvedVariable
                 var response = this.$.api.lastResponse;
@@ -195,6 +233,9 @@
                 }
             },
 
+            /**
+             * Redirects the user on successful login
+             */
             onSuccess: function () {
                 // trigger password-saving in non-chrome browsers
                 this.$fakeForm.querySelector('#fake-login-submit').click();
@@ -202,6 +243,9 @@
                 window.location.href = this.base + this.targetHref.replace(/^\/+/, '');
             },
 
+            /**
+             * Shows an error message when the login data was incorrect
+             */
             onFail: function () {
                 var self = this;
                 // show error message for 3 seconds
