@@ -131,10 +131,15 @@
         <paper-dialog class="popup no-padding" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
             <ul>
                 <li>
-                    <!--suppress HtmlUnknownTarget -->
                     <a on-tap="signOut">
                         <iron-icon icon="exit-to-app"></iron-icon>
                         <span class="main-info">{{accountInfo.logoutLabel}}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="[[passwordUrl]]">
+                        <iron-icon icon="perm-identity"></iron-icon>
+                        <span class="main-info">{{accountInfo.passwordLabel}}</span>
                     </a>
                 </li>
             </ul>
@@ -166,6 +171,10 @@
                 logoutUrl: {
                     type: String,
                     computed: 'computeUrl(base, accountInfo.logoutHref)'
+                },
+                passwordUrl: {
+                    type: String,
+                    computed: 'computeUrl(base, accountInfo.passwordHref)'
                 }
             },
 

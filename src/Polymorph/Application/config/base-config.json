@@ -65,7 +65,9 @@
       "loginHref": "/polymorph/account/login",
       "loginLabel": "Sign in",
       "logoutHref": "/polymorph/account/logout",
-      "logoutLabel": "Sign out"
+      "logoutLabel": "Sign out",
+      "passwordHref": "/polymorph/account/password",
+      "passwordLabel": "Change your password"
     },
 
     "/polymorph/account/login": {
@@ -85,6 +87,21 @@
     "/polymorph/account/logout": {
       "call": "Polymorph\\Security\\LogoutController::handleLogoutRequest",
       "targetHref": "/"
+    },
+
+    "/polymorph/account/password": {
+      "call": "Polymorph\\Security\\PasswordController::handlePasswordRequest",
+      "template": "Polymorph/Application/templates/content.html.twig",
+      "pageTitle": "Change your password",
+      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-password-form.html",
+      "elementData": {
+        "oldPasswordLabel": "Current password",
+        "newPasswordLabel": "New password",
+        "confirmedPasswordLabel": "New password again",
+        "buttonLabel": "Update password",
+        "errorText": "Password could not be changed. Please try again",
+        "successText": "Your password was successfully updated."
+      }
     }
   }
 }

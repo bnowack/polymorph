@@ -5,7 +5,6 @@ namespace Polymorph\Security;
 use Polymorph\Application\Application;
 use Polymorph\User\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -34,9 +33,10 @@ class SecurityController
             'loginLabel' => $routeOptions->loginLabel,
             'logoutHref' => $routeOptions->logoutHref,
             'logoutLabel' => $routeOptions->logoutLabel,
-            'logoutToken' => $app['security']->getToken('logout')->getValue()
+            'logoutToken' => $app['security']->getToken('logout')->getValue(),
+            'passwordHref' => $routeOptions->passwordHref,
+            'passwordLabel' => $routeOptions->passwordLabel
         ];
         return new JsonResponse($response);
     }
-
 }
