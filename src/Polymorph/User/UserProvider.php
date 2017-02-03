@@ -5,7 +5,6 @@ namespace Polymorph\User;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -37,16 +36,6 @@ class UserProvider implements UserProviderInterface
     }
 
     /**
-     * Returns a query builder for the user database
-     *
-     * @return QueryBuilder
-     */
-    protected function query()
-    {
-        return $this->conn->createQueryBuilder();
-    }
-
-    /**
      * Creates a password encoder
      *
      * @return BCryptPasswordEncoder
@@ -64,25 +53,23 @@ class UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $user = $this->query()
-            ->select('*')
-            ->from('User')
-            ->where('username = ?')->setParameter(0, strtolower($username))
-            ->execute()
-            ->fetch();
+        $row = $this->conn->fetchAssoc(
+            'SELECT * FROM User WHERE username = ?',
+            [strtolower($username)]
+        );
 
-        if (!$user) {
+        if (!$row) {
             throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
         }
 
         return new User(
-            $user['username'],
-            $user['password'],
-            explode(',', $user['roles']),
-            $user['enabled'],
-            !$user['expired'],
-            !$user['credentialsExpired'],
-            !$user['locked']
+            $row['username'],
+            $row['password'],
+            explode(',', $row['roles']),
+            $row['enabled'],
+            $row['expired'],
+            $row['credentialsExpired'],
+            $row['locked']
         );
     }
 
@@ -109,13 +96,13 @@ class UserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return $class === 'Symfony\Component\Security\Core\User\User';
+        return $class === 'Polymorph\User\User';
     }
 
     /**
      * Adds a user reference to the provider and the session
      *
-     * @param $user
+     * @param User|string $user
      * @return bool TRUE on success
      */
     public function setCurrentUser($user)
@@ -147,7 +134,7 @@ class UserProvider implements UserProviderInterface
         // return user or guest user
         return $this->currentUser
             ? $this->currentUser
-            : new User('guest', '', ['guest'], true, true, true, true);
+            : new User('guest', '', ['guest'], true, false, false, false);
     }
 
     /**
@@ -237,13 +224,11 @@ class UserProvider implements UserProviderInterface
      */
     public function usernameExists($username)
     {
-        $user = $this->query()
-            ->select('username')
-            ->from('User')
-            ->where('username = ?')->setParameter(0, strtolower($username))
-            ->execute()
-            ->fetch();
-        return !!$user;
+        $row = $this->conn->fetchAssoc(
+            'SELECT username FROM User WHERE username = ?',
+            [strtolower($username)]
+        );
+        return !!count($row);
     }
 
     /**
@@ -254,10 +239,10 @@ class UserProvider implements UserProviderInterface
      */
     public function deleteUser(User $user)
     {
-        return $this->query()
-            ->delete('User')
-            ->where('username = ?')->setParameter(0, $user->getUsername())
-            ->execute();
+        return $this->conn->delete(
+            'User',
+            ['username' => $user->getUsername()]
+        );
     }
 
     /**
@@ -282,16 +267,18 @@ class UserProvider implements UserProviderInterface
      */
     protected function insertUser(User $user)
     {
-        return $this->query()
-            ->insert('User')
-            ->setValue('username', '?')             ->setParameter(0, strtolower($user->getUsername()))
-            ->setValue('password', '?')             ->setParameter(1, $user->getPassword())
-            ->setValue('roles', '?')                ->setParameter(2, join(',', $user->getRoles()))
-            ->setValue('enabled', '?')              ->setParameter(3, $user->isEnabled())
-            ->setValue('expired', '?')              ->setParameter(4, !$user->isAccountNonExpired())
-            ->setValue('credentialsExpired', '?')   ->setParameter(5, !$user->isCredentialsNonExpired())
-            ->setValue('locked', '?')               ->setParameter(6, !$user->isAccountNonLocked())
-            ->execute();
+        return $this->conn->insert(
+            'User',
+            [
+                'username' => strtolower($user->getUsername()),
+                'password' => $user->getPassword(),
+                'roles' => join(',', $user->getRoles()),
+                'enabled' => $user->isEnabled(),
+                'expired' => !$user->isAccountNonExpired(),
+                'credentialsExpired' => !$user->isCredentialsNonExpired(),
+                'locked' => !$user->isAccountNonLocked()
+            ]
+        );
     }
 
     /**
@@ -302,15 +289,17 @@ class UserProvider implements UserProviderInterface
      */
     protected function updateUser(User $user)
     {
-        return $this->query()
-            ->update('User')
-            ->where('username = ?')->setParameter(0, strtolower($user->getUsername()))
-            ->set('password', '?')             ->setParameter(1, $user->getPassword())
-            ->set('roles', '?')                ->setParameter(2, join(',', $user->getRoles()))
-            ->set('enabled', '?')              ->setParameter(3, $user->isEnabled())
-            ->set('expired', '?')              ->setParameter(4, !$user->isAccountNonExpired())
-            ->set('credentialsExpired', '?')   ->setParameter(5, !$user->isCredentialsNonExpired())
-            ->set('locked', '?')               ->setParameter(6, !$user->isAccountNonLocked())
-            ->execute();
+        return $this->conn->update(
+            'User',
+            [
+                'password' => $user->getPassword(),
+                'roles' => join(',', $user->getRoles()),
+                'enabled' => $user->isEnabled(),
+                'expired' => !$user->isAccountNonExpired(),
+                'credentialsExpired' => !$user->isCredentialsNonExpired(),
+                'locked' => !$user->isAccountNonLocked()
+            ],
+            ['username' => strtolower($user->getUsername())]
+        );
     }
 }

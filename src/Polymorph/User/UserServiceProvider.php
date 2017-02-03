@@ -6,7 +6,6 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\BootableProviderInterface;
 use Silex\Application;
-use Symfony\Component\Security\Core\User\User;
 
 class UserServiceProvider implements ServiceProviderInterface, BootableProviderInterface
 {
@@ -40,6 +39,7 @@ class UserServiceProvider implements ServiceProviderInterface, BootableProviderI
         // register self
         $app[$this->name] = function () use ($app) {
             // create user provider
+            /** @noinspection PhpUndefinedMethodInspection */
             $userProviderClass = $app->config('userProvider', 'Polymorph\\User\\UserProvider');
             $this->userProvider = new $userProviderClass($app);
             // return service provider
@@ -84,8 +84,8 @@ class UserServiceProvider implements ServiceProviderInterface, BootableProviderI
     /**
      * Sets the currently active user
      *
-     * @param $user
-     * @return bool
+     * @param User $user
+     * @return bool TRUE on success
      */
     public function setCurrentUser($user)
     {

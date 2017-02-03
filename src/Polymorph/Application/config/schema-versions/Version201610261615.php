@@ -4,7 +4,7 @@ namespace Polymorph\Schema\Versions;
 
 use Polymorph\Schema\Version;
 use Polymorph\User\UserServiceProvider;
-use Symfony\Component\Security\Core\User\User;
+use Polymorph\User\User;
 
 class Version201610261615 extends Version
 {
@@ -85,6 +85,7 @@ class Version201610261615 extends Version
 
     /**
      * Removes Version and User tables
+     *
      * @todo create backup dump for loss-less re-applying?
      * @return bool
      */

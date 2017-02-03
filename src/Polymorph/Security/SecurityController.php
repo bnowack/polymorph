@@ -3,7 +3,7 @@
 namespace Polymorph\Security;
 
 use Polymorph\Application\Application;
-use Symfony\Component\Security\Core\User\User;
+use Polymorph\User\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
