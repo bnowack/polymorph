@@ -72,12 +72,12 @@
       "call": "Polymorph\\Security\\LoginController::handleLoginRequest",
       "template": "Polymorph/Application/templates/content.html.twig",
       "pageTitle": "Login",
-      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-login.html",
+      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-login-form.html",
       "elementData": {
         "usernameLabel": "Email",
         "passwordLabel": "Password",
         "buttonLabel": "Sign in",
-        "errorText": "Wrong email or password. Please try again",
+        "errorText": "Wrong email or password. Please try again.",
         "targetHref": "/"
       }
     },

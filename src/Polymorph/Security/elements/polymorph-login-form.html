@@ -18,7 +18,7 @@
     }
 </style>
 
-<dom-module id="polymorph-login">
+<dom-module id="polymorph-login-form">
     <template>
         <style include="shared-styles">
             :host {
@@ -43,12 +43,14 @@
                 background-color: var(--polymorph-login-primary-color);
             }
 
-            /*noinspection CssUnusedSymbol*/
-            .login-error {
-                color: var(--polymorph-login-error-color);
+            iron-collapse {
                 padding: 16px 8px;
                 font-size: 0.85em;
                 font-family: var(--polymorph-login-font, 'sans-serif');
+            }
+
+            .api-error {
+                color: var(--polymorph-login-error-color);
             }
 
         </style>
@@ -62,55 +64,40 @@
             <input id="fake-login-submit" type="submit" value="login"/>
         </form>
 
-        <form name="login" id="login" method="POST" action="[[action]]" on-submit="onSubmit">
+        <form name="login" id="login" method="POST" on-submit="onSubmit">
             <input type="hidden" name="token" value="[[token]]"/>
             <paper-input name="username" value="{{username}}" label="[[usernameLabel]]" required autocomplete></paper-input>
             <paper-input name="password" value="{{password}}"  label="[[passwordLabel]]" type="password" autocomplete="current-password"></paper-input>
 
             <iron-collapse id="failed">
-                <div class="login-error">
-                    [[errorText]]
+                <div class="api-error">
+                    [[apiMessage]]
                 </div>
             </iron-collapse>
             <paper-button raised on-click="doLogin">[[buttonLabel]]</paper-button>
         </form>
 
-        <iron-ajax id="api" url="[[action]]" method="POST" handle-as="json" on-response="onResponse"></iron-ajax>
+        <iron-ajax id="api" url="[[apiUrl]]" method="POST" handle-as="json" on-response="onResponse"></iron-ajax>
     </template>
 
     <script>
         Polymer({
 
-            is: 'polymorph-login',
+            is: 'polymorph-login-form',
 
             properties: {
                 base: {
                     type: String,
                     value: window.base
                 },
-                usernameLabel: {
-                    type: String
-                },
-                passwordLabel: {
-                    type: String
-                },
-                token: {
-                    type: String,
-                    value: ''
-                },
-                action: {
+                usernameLabel: String,
+                passwordLabel: String,
+                token: String,
+                apiUrl: {
                     type: String,
                     value: window.location.href
                 },
-                errorText: {
-                    type: String,
-                    value: 'login failed'
-                },
-                loginFailed: {
-                    type: Boolean,
-                    value: false,
-                    notify: true
-                },
+                apiMessage: String,
                 targetHref: {
                     type: String,
                     value: window.base
@@ -227,9 +214,9 @@
                     return;
                 }
                 if (response.success) {
-                    this.onSuccess();
+                    this.onSuccess(response);
                 } else {
-                    this.onFail();
+                    this.onFail(response);
                 }
             },
 
@@ -240,15 +227,19 @@
                 // trigger password-saving in non-chrome browsers
                 this.$fakeForm.querySelector('#fake-login-submit').click();
                 // trigger password-saving in chrome
-                window.location.href = this.base + this.targetHref.replace(/^\/+/, '');
+                var targetUrl = this.base + this.targetHref.replace(/^\/+/, '');
+                setTimeout(function () {
+                    window.location.href = targetUrl;
+                }, 500);
             },
 
             /**
              * Shows an error message when the login data was incorrect
              */
-            onFail: function () {
+            onFail: function (response) {
                 var self = this;
                 // show error message for 3 seconds
+                this.set('apiMessage', response.message);
                 this.$.failed.set('opened', true);
                 this.resetTO = setTimeout(function () {
                     self.$.failed.set('opened', false);
