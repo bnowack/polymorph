@@ -15,7 +15,11 @@
     "phone": "",
     "titleSuffix": " - Polymorph Framework",
     "robots": "index,follow",
-    "viewport": "width=device-width, initial-scale=1"
+    "viewport": "width=device-width, initial-scale=1",
+    "errorPage": {
+      "heading": "An error occurred",
+      "homeLink": "Back to homepage"
+    }
   },
   "icons": {
     "browser": "bower_components/polymorph/src/Polymorph/Application/img/favicon.png",
