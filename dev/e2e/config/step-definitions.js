@@ -21,7 +21,7 @@ module.exports = function () {
     this.Then('I should see the home page', function (callback) {
         var self = this;
         this.browser
-            .waitFor('polymorph-page[path="/"]')
+            .waitFor('polymorph-app-page[path="/"]')
             .then(function () {
                 callback();
             });

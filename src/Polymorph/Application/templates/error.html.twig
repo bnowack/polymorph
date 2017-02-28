@@ -4,7 +4,7 @@
 {% block imports %}
 
     {{ parent() }}
-    <link rel="import" href="bower_components/polymorph/src/Polymorph/Page/elements/polymorph-page.html?0.2.0"/><!-- with cache-id -->
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-page.html?0.2.0"/><!-- with cache-id -->
     <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-exception.html?0.2.0"/><!-- with cache-id -->
 
 {% endblock %}
@@ -17,7 +17,7 @@
         <a href="{{base}}">{{ meta.errorPage.homeLink }}</a>
     </p>
 
-    <polymorph-page class="polymorph-partial" path="{{ view.path }}">
+    <polymorph-app-page class="polymorph-partial" path="{{ view.path }}">
 
         {% for exception in exceptions %}
 
@@ -37,6 +37,6 @@
 
         {% endfor %}
 
-    </polymorph-page>
+    </polymorph-app-page>
 
 {% endblock %}

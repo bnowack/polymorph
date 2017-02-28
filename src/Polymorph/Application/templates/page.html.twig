@@ -105,7 +105,7 @@
     <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-header.html?0.2.0"/><!-- with cache-id -->
     <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-canvas.html?0.2.0"/><!-- with cache-id -->
     <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-footer.html?0.2.0"/><!-- with cache-id -->
-    <link rel="import" href="bower_components/polymorph/src/Polymorph/Page/elements/polymorph-page.html?0.2.0"/><!-- with cache-id -->
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-page.html?0.2.0"/><!-- with cache-id -->
     <link rel="import" href="{{ sharedStylesHref }}?{{ meta.version }}"/>
 
     {% endblock %}
@@ -122,13 +122,13 @@
                 <polymorph-app-canvas>
 
                     {% block view %}
-                        <polymorph-page
+                        <polymorph-app-page
                                 class="polymorph-partial"
                                 path="{{ view.path }}"
                                 element="{{ element }}"
                                 element-data="{{ elementData|json_encode }}">
                             {{ content|raw }}
-                        </polymorph-page>
+                        </polymorph-app-page>
                     {% endblock %}
 
                 </polymorph-app-canvas>
