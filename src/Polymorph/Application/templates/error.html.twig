@@ -11,13 +11,13 @@
 
 {% block view %}
 
-    <h1>{{ meta.errorPage.heading }}</h1>
-
-    <p>
-        <a href="{{base}}">{{ meta.errorPage.homeLink }}</a>
-    </p>
-
     <polymorph-app-page class="polymorph-partial" path="{{ view.path }}">
+
+        <h1>{{ meta.errorPage.heading }}</h1>
+
+        <p>
+            <a href="{{base}}">{{ meta.errorPage.homeLink }}</a>
+        </p>
 
         {% for exception in exceptions %}
 
