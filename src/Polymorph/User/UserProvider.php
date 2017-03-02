@@ -228,7 +228,7 @@ class UserProvider implements UserProviderInterface
             'SELECT username FROM User WHERE username = ?',
             [strtolower($username)]
         );
-        return !!count($row);
+        return $row && !empty($row['username']);
     }
 
     /**
