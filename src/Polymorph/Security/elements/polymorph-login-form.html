@@ -10,14 +10,6 @@
 <link rel="import" href="../../../../../../bower_components/iron-collapse/iron-collapse.html"/>
 <link rel="import" href="../../../../../../bower_components/iron-ajax/iron-ajax.html"/>
 
-<!-- global styles -->
-<style>
-    #fake-login{
-        position: fixed;
-        left: 200%;
-    }
-</style>
-
 <dom-module id="polymorph-login-form">
     <template>
         <style include="shared-styles">
@@ -32,7 +24,8 @@
 
             #fake-login{
                 position: fixed;
-                left: 200%;
+                top: -500px;
+                left: -500px;
             }
 
             paper-button {
@@ -116,7 +109,10 @@
              */
             moveFakeForm: function () {
                 this.async(function () {
-                    Polymer.dom(this).parentNode.appendChild(this.$fakeForm);
+                    this.$fakeForm.style.position = 'fixed';
+                    this.$fakeForm.style.top = '-500px';
+                    this.$fakeForm.style.left = '-500px';
+                    document.querySelector('body').appendChild(this.$fakeForm);
                 }, 250);
             },
 
