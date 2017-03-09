@@ -66,6 +66,7 @@
 
     "polymorph/account.json": {
       "call": "Polymorph\\Security\\SecurityController::handleAccountInfoRequest",
+      "sysNavEntriesElement": "bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-sys-nav-entries.html",
       "loginHref": "/polymorph/account/login",
       "loginLabel": "Sign in",
       "logoutHref": "/polymorph/account/logout",
@@ -77,7 +78,7 @@
     "/polymorph/account/login": {
       "call": "Polymorph\\Security\\LoginController::handleLoginRequest",
       "template": "Polymorph/Application/templates/content.html.twig",
-      "pageTitle": "Login",
+      "pageTitle": "Sign in",
       "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-login-card.html?v=0.2.2",
       "elementData": {
         "cardTitle": "Sign in",

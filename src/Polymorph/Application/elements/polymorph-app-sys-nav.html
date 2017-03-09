@@ -8,6 +8,9 @@
 <link rel="import" href="../../../../../paper-dialog/paper-dialog.html"/>
 <link rel="import" href="../../../../../iron-icon/iron-icon.html"/>
 <link rel="import" href="../../../../../iron-icons/iron-icons.html"/>
+<!-- behaviors -->
+<link rel="import" href="../element-behaviors/lazyloading.html?0.2.2"/><!-- with cache-id -->
+
 <!-- `shared-styles` are project-specific and get imported by the page template -->
 
 <dom-module id='polymorph-app-sys-nav'>
@@ -27,7 +30,7 @@
             a.toggle, a.login {
                 font-family: var(--polymorph-app-sys-nav-toggle-font, sans-serif);
                 font-size: 0.9em;
-                font-weight: 600;
+                font-weight: normal;
                 text-decoration: none;
                 color: var(--polymorph-app-sys-nav-toggle-color);
                 cursor: pointer;
@@ -66,60 +69,6 @@
                 right: 10px;
                 top: -15px;
             }
-
-            ul {
-                margin: 0 !important;
-                padding: 0 !important;
-                list-style-type: none;
-            }
-
-            li {
-                font-size: 16px;
-                line-height: 1.5;
-                position: relative;
-            }
-
-            li + li {
-                border-top: 1px solid #eee;
-            }
-
-            li > * {
-                padding: 8px 16px 6px 16px;
-            }
-
-            li a {
-                display: block;
-                color: var(--polymorph-app-sys-nav-link-color);
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-            li a:hover {
-                background-color: #eee;
-            }
-
-            li span {
-                display: block;
-            }
-
-            .main-info {
-                font-weight: 500;
-                padding-right: 40px;
-            }
-
-            .sub-info {
-                color: #666;
-                font-size: 0.9em;
-                padding-right: 40px;
-            }
-
-            iron-icon {
-                position: absolute;
-                right: 8px;
-                top: 10px;
-                --iron-icon-width: 20px;
-                --iron-icon-height: 20px;
-            }
         </style>
 
         <a class="login" hidden$={{!isGuest(accountInfo)}} href="{{loginUrl}}">
@@ -129,30 +78,19 @@
             {{accountInfo.username}}
         </a>
         <paper-dialog class="popup no-padding" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
-            <ul>
-                <li>
-                    <a on-tap="signOut">
-                        <iron-icon icon="exit-to-app"></iron-icon>
-                        <span class="main-info">{{accountInfo.logoutLabel}}</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="[[passwordUrl]]">
-                        <iron-icon icon="perm-identity"></iron-icon>
-                        <span class="main-info">{{accountInfo.passwordLabel}}</span>
-                    </a>
-                </li>
-            </ul>
         </paper-dialog>
 
         <iron-ajax id="account" auto url="{{accountInfoHref}}" handle-as="json" last-response="{{accountInfo}}"></iron-ajax>
-        <iron-ajax id="logout" url="{{logoutUrl}}" handle-as="json" method="POST" on-response="onLogout"></iron-ajax>
     </template>
     <script>
         //noinspection JSUnusedGlobalSymbols
         Polymer({
 
             is: "polymorph-app-sys-nav",
+
+            behaviors: [
+                polymorphLazyloading
+            ],
 
             properties: {
                 base: {
@@ -168,14 +106,23 @@
                     type: String,
                     computed: 'computeUrl(base, accountInfo.loginHref)'
                 },
-                logoutUrl: {
-                    type: String,
-                    computed: 'computeUrl(base, accountInfo.logoutHref)'
-                },
-                passwordUrl: {
-                    type: String,
-                    computed: 'computeUrl(base, accountInfo.passwordHref)'
-                }
+                entriesElement: String
+            },
+
+            observers: [
+                'onEntriesElement(accountInfo.sysNavEntriesElement)'
+            ],
+
+            onEntriesElement: function (elementHref) {
+                var path = this.computeUrl(this.base, elementHref);
+                var elementName = path.replace(/^.*\/([^\/]+)\.html.*$/, '$1');
+                var self = this;
+                this.lazyload([path]).then(function () {
+                    var element = document.createElement(elementName);
+                    var popup = self.$$('.popup');
+                    Polymer.dom(popup).appendChild(element);
+                    element.set('accountInfo', self.accountInfo);
+                });
             },
 
             computeUrl: function (base, href) {
@@ -196,27 +143,6 @@
              */
             isGuest: function (accountInfo) {
                 return (!accountInfo || !accountInfo.roles.length || accountInfo.roles[0] === 'guest');
-            },
-
-            signOut: function () {
-                //noinspection JSUnresolvedVariable
-                this.$.logout.set('body', encodeURIComponent('token') + '=' +  encodeURIComponent(this.accountInfo.logoutToken));
-                //noinspection JSUnresolvedVariable
-                this.$.logout.generateRequest();
-            },
-
-            onLogout: function () {
-                //noinspection JSUnresolvedVariable
-                var response = this.$.logout.lastResponse;
-                if (!response) {
-                    return;
-                }
-                if (response.success) {
-                    //noinspection JSValidateTypes
-                    window.location.href = response.targetHref;
-                } else {
-                    alert(response.message)
-                }
             }
         });
     </script>

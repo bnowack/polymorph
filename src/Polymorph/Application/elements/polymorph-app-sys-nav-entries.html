@@ -1,0 +1,145 @@
+<!--suppress HtmlUnknownTarget, CssUnusedSymbol -->
+
+<!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
+<link rel="import" href="../../../../../polymer/polymer.html"/>
+<link rel="import" href="../../../../../iron-icon/iron-icon.html"/>
+<link rel="import" href="../../../../../iron-icons/iron-icons.html"/>
+<!-- `shared-styles` are project-specific and get imported by the page template -->
+
+<dom-module id='polymorph-app-sys-nav-entries'>
+    <template>
+        <style include="shared-styles">
+
+            /* element styles */
+
+            :host {
+                position: relative;
+                font-family: var(--polymorph-app-sys-nav-font, sans-serif);
+                text-align: left;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* link styles */
+
+            ul {
+                margin: 0 !important;
+                padding: 0 !important;
+                list-style-type: none;
+            }
+
+            li {
+                font-size: 16px;
+                line-height: 1.5;
+                position: relative;
+            }
+
+            li + li {
+                border-top: 1px solid #eee;
+            }
+
+            li > * {
+                padding: 8px 16px 6px 16px;
+            }
+
+            li a {
+                display: block;
+                color: var(--polymorph-app-sys-nav-link-color);
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            li a:hover {
+                background-color: #eee;
+            }
+
+            li span {
+                display: block;
+            }
+
+            .main-info {
+                font-weight: 500;
+                padding-right: 40px;
+            }
+
+            .sub-info {
+                color: #666;
+                font-size: 0.9em;
+                padding-right: 40px;
+            }
+
+            iron-icon {
+                position: absolute;
+                right: 8px;
+                top: 10px;
+                --iron-icon-width: 20px;
+                --iron-icon-height: 20px;
+            }
+        </style>
+
+        <ul>
+            <li>
+                <a on-tap="signOut">
+                    <iron-icon icon="exit-to-app"></iron-icon>
+                    <span class="main-info">{{accountInfo.logoutLabel}}</span>
+                </a>
+            </li>
+            <li>
+                <a href="[[passwordUrl]]">
+                    <iron-icon icon="perm-identity"></iron-icon>
+                    <span class="main-info">{{accountInfo.passwordLabel}}</span>
+                </a>
+            </li>
+        </ul>
+
+        <iron-ajax id="logout" url="{{logoutUrl}}" handle-as="json" method="POST" on-response="onLogout"></iron-ajax>
+    </template>
+    <script>
+        //noinspection JSUnusedGlobalSymbols
+        Polymer({
+
+            is: "polymorph-app-sys-nav-entries",
+
+            properties: {
+                base: {
+                    type: String,
+                    value: window.base
+                },
+                accountInfo: Object,
+                logoutUrl: {
+                    type: String,
+                    computed: 'computeUrl(base, accountInfo.logoutHref)'
+                },
+                passwordUrl: {
+                    type: String,
+                    computed: 'computeUrl(base, accountInfo.passwordHref)'
+                }
+            },
+
+            computeUrl: function (base, href) {
+                return base + href.replace(/^\/+/, '');
+            },
+
+            signOut: function () {
+                //noinspection JSUnresolvedVariable
+                this.$.logout.set('body', encodeURIComponent('token') + '=' +  encodeURIComponent(this.accountInfo.logoutToken));
+                //noinspection JSUnresolvedVariable
+                this.$.logout.generateRequest();
+            },
+
+            onLogout: function () {
+                //noinspection JSUnresolvedVariable
+                var response = this.$.logout.lastResponse;
+                if (!response) {
+                    return;
+                }
+                if (response.success) {
+                    //noinspection JSValidateTypes
+                    window.location.href = response.targetHref;
+                } else {
+                    alert(response.message)
+                }
+            }
+        });
+    </script>
+</dom-module>

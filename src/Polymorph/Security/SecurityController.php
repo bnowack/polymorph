@@ -29,6 +29,7 @@ class SecurityController
         $response = [
             'username' => $user->getUsername(),
             'roles' => $user->getRoles(),
+            'sysNavEntriesElement' => $routeOptions->sysNavEntriesElement,
             'loginHref' => $routeOptions->loginHref,
             'loginLabel' => $routeOptions->loginLabel,
             'logoutHref' => $routeOptions->logoutHref,
