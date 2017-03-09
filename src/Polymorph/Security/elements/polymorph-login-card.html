@@ -1,0 +1,51 @@
+<!-- elements (relative to `bower_components/polymorph/src/Polymorph/Security/elements`) -->
+<link rel="import" href="../../../../../polymer/polymer.html"/>
+<link rel="import" href="../../Application/elements/polymorph-app-card.html?0.2.2"/><!-- with cache-id -->
+<link rel="import" href="polymorph-login-form.html?0.2.2"/><!-- with cache-id -->
+<!-- styles (shared styles are loaded once via page template) -->
+
+<dom-module id="polymorph-login-card">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                box-sizing: border-box;
+                font-family: sans-serif;
+                max-width: 400px;
+                margin: 80px auto 0;
+                @apply(--polymorph-login-card);
+            }
+
+            polymorph-login-form {
+                padding-top: 8px;
+                padding-bottom: 32px;
+            }
+        </style>
+
+        <polymorph-app-card class="title-card">
+            <h2>{{cardTitle}}</h2>
+            <polymorph-login-form
+                    id="form"
+                    username-label="{{usernameLabel}}"
+                    password-label="{{passwordLabel}}"
+                    button-label="{{buttonLabel}}"
+                    error-text="{{errorText}}"
+                    target-href="{{targetHref}}"
+                    token="{{token}}">
+            </polymorph-login-form>
+        </polymorph-app-card>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'polymorph-login-card',
+
+            properties: {
+                cardTitle: {
+                    type: String,
+                    value: 'Sign in'
+                }
+            }
+        });
+    </script>
+</dom-module>
