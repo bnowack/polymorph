@@ -1,0 +1,42 @@
+<!--suppress JSUnusedGlobalSymbols, JSUnresolvedVariable, HtmlUnknownTarget -->
+
+<!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
+<link rel="import" href="../../../../../polymer/polymer.html"/>
+
+<dom-module id="polymorph-app-redirect">
+    <template>
+        Redirecting to <a href="{{targetUrl}}">{{targetHref}}</a>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'polymorph-app-redirect',
+
+            properties: {
+                base: {
+                    type: String,
+                    value: window.base
+                },
+                targetHref: {
+                    type: String,
+                    value: window.base
+                },
+                targetUrl: {
+                    type: String,
+                    computed: 'computeTargetUrl(base, targetHref)'
+                }
+            },
+
+            computeTargetUrl: function (base, targetHref) {
+                return base + targetHref.replace(/^\/+/, '');
+            },
+
+            attached: function () {
+                this.async(function () {
+                    location.href = this.targetUrl;
+                }, 500);
+            }
+        });
+    </script>
+</dom-module>
