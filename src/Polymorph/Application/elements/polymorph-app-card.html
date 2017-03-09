@@ -1,0 +1,49 @@
+<!-- elements (relative to `bower_components/polymorph/src/Polymorph/Application/elements`) -->
+<link rel="import" href="../../../../../polymer/polymer.html"/>
+<!-- styles (shared styles are loaded once via page template) -->
+
+<dom-module id="polymorph-app-card">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                box-sizing: border-box;
+                font-family: sans-serif;
+                background-color: #fff;
+                box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
+                border-radius: 2px;
+                margin-bottom: 8px;
+                padding: 16px;
+                @apply(--polymorph-app-card);
+            }
+
+            :host ::content h2 {
+                margin: 0;
+            }
+
+            :host(.title-card) {
+                padding: 0;
+            }
+
+            :host(.title-card) ::content h2 {
+                line-height: 40px;
+                background-color: #f9f9f9;
+                text-transform: uppercase;
+                font-size: 16px;
+                font-family: sans-serif;
+                font-weight: normal;
+                padding: 0 16px;
+                border-bottom: 1px solid #fff;
+                @apply(--polymorph-app-card-title);
+            }
+        </style>
+
+        <content></content>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'polymorph-app-card'
+        });
+    </script>
+</dom-module>
