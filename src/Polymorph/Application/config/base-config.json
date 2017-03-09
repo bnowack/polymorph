@@ -99,8 +99,9 @@
       "call": "Polymorph\\Security\\PasswordController::handlePasswordRequest",
       "template": "Polymorph/Application/templates/content.html.twig",
       "pageTitle": "Change your password",
-      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-password-form.html",
+      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-password-card.html?v=0.2.2",
       "elementData": {
+        "cardTitle": "Change your password",
         "oldPasswordLabel": "Current password",
         "newPasswordLabel": "New password",
         "confirmedPasswordLabel": "New password again",
