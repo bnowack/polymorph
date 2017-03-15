@@ -44,21 +44,17 @@
   "routes": {
 
     "/": {
-      "call": "Polymorph\\Application\\ApplicationController::handleTemplateRequest",
-      "template": "Polymorph/Application/templates/content.html.twig",
       "pageTitle": "Welcome",
       "contentTemplate": "Polymorph/Application/templates/welcome.html.twig"
     },
 
     "/manifest.json": {
-      "call": "Polymorph\\Application\\ApplicationController::handleTemplateRequest",
       "template": "Polymorph/Application/templates/manifest.json.twig",
       "contentType": "application/json"
     },
 
     "/polymorph/schema/versions": {
       "call": "Polymorph\\Schema\\SchemaController::handleSchemaVersionsRequest",
-      "template": "Polymorph/Application/templates/content.html.twig",
       "element": "bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-simple-list.html",
       "pageTitle": "Schema Versions",
       "heading": "Applied Schema Versions"
@@ -77,7 +73,6 @@
 
     "/polymorph/account/login": {
       "call": "Polymorph\\Security\\LoginController::handleLoginRequest",
-      "template": "Polymorph/Application/templates/content.html.twig",
       "pageTitle": "Sign in",
       "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-login-card.html?v=0.3.1",
       "elementData": {
@@ -97,7 +92,6 @@
 
     "/polymorph/account/password": {
       "call": "Polymorph\\Security\\PasswordController::handlePasswordRequest",
-      "template": "Polymorph/Application/templates/content.html.twig",
       "pageTitle": "Change your password",
       "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-password-card.html?v=0.3.1",
       "elementData": {

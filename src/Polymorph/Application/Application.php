@@ -129,6 +129,14 @@ class Application extends SilexApplication
             if (is_string($routeOptions)) {// routeOptions is a `Class::method` string
                 $this->match($pathWithBase, $routeOptions);
             } else {// routeOptions is an object (and should have a 'call' property)
+                // set default call
+                if (empty($routeOptions->call)) {
+                    $routeOptions->call = 'Polymorph\\Application\\ApplicationController::handleTemplateRequest';
+                }
+                // set default template
+                if (empty($routeOptions->template)) {
+                    $routeOptions->template = 'Polymorph/Application/templates/content.html.twig';
+                }
                 /* Silex\Controller $controller */
                 $controller = $this->match($pathWithBase, $routeOptions->call);
                 // make route options available as controller call parameter
