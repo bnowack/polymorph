@@ -170,6 +170,14 @@ class Application extends SilexApplication
     public function render($view, $parameters = array(), Response $response = null)
     {
         $templateParameters = $this->buildTemplateParameters($parameters);
+
+        // render content template, if defined
+        if (!empty($templateParameters['contentTemplate'])) {
+            $template = $templateParameters['contentTemplate'];
+            $templateParameters['content'] = $this['twig']->render($template, $templateParameters);
+        }
+
+        // render view template
         return $this->twigRender($view, $templateParameters, $response);
     }
 

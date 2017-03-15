@@ -47,7 +47,7 @@
       "call": "Polymorph\\Application\\ApplicationController::handleTemplateRequest",
       "template": "Polymorph/Application/templates/content.html.twig",
       "pageTitle": "Welcome",
-      "content": "Welcome to Polymorph"
+      "contentTemplate": "Polymorph/Application/templates/welcome.html.twig"
     },
 
     "/manifest.json": {
