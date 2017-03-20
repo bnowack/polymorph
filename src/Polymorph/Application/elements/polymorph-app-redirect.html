@@ -5,7 +5,17 @@
 
 <dom-module id="polymorph-app-redirect">
     <template>
-        Redirecting to <a href="{{targetUrl}}">{{targetHref}}</a>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                text-align: center;
+                padding: 40px;
+                @apply(--polymorph-app-redirect);
+            }
+        </style>
+        <p>
+            Redirecting to <a href="{{targetUrl}}">{{targetHref}}</a>
+        </p>
     </template>
 
     <script>
