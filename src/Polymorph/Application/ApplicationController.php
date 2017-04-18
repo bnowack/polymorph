@@ -58,6 +58,8 @@ class ApplicationController
     {
         // check role
         if (!empty($routeOptions->role) && !$app['users']->hasRole($routeOptions->role)) {
+            $routeOptions->element = null;
+            $routeOptions->elementData = null;
             if (!empty($app->config('accessDeniedContentTemplate'))) {
                 // render custom "access denied" content template
                 $routeOptions->contentTemplate = $app->config('accessDeniedContentTemplate');
