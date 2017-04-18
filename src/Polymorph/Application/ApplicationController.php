@@ -58,7 +58,22 @@ class ApplicationController
     {
         // check role
         if (!empty($routeOptions->role) && !$app['users']->hasRole($routeOptions->role)) {
-            $app->abort(401, $routeOptions->errorMessage);
+            if (!empty($app->config('accessDeniedContentTemplate'))) {
+                // render custom "access denied" content template
+                $routeOptions->contentTemplate = $app->config('accessDeniedContentTemplate');
+            } elseif (!empty($app->config('accessDeniedTemplate'))) {
+                // render custom "access denied" page template
+                $routeOptions->template = $app->config('accessDeniedTemplate');
+            } elseif (!empty($app->config('accessDeniedMessage'))) {
+                // render custom "access denied" error message
+                $app->abort(401, $app->config('accessDeniedMessage'));
+            } elseif (!empty($app->config('accessDeniedHref'))) {
+                // redirect denied user to custom URL
+                return $app->redirect($app->base . $app->config('accessDeniedHref'));
+            } else {
+                // render default error message
+                $app->abort(401, 'Access Denied');
+            }
         }
 
         $response = $app->render($routeOptions->template, $routeOptions);
