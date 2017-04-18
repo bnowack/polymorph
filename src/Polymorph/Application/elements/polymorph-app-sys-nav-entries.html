@@ -135,7 +135,7 @@
                 }
                 if (response.success) {
                     //noinspection JSValidateTypes
-                    window.location.href = response.targetHref;
+                    window.location.href = this.computeUrl(this.base, response.targetHref);
                 } else {
                     alert(response.message)
                 }
