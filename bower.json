@@ -1,6 +1,6 @@
 {
   "name": "polymorph",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "homepage": "https://github.com/bnowack/polymorph",
   "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
   "authors": [
