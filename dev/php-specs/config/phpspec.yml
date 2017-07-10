@@ -1,15 +1,19 @@
 bootstrap: dev/php-specs/config/bootstrap.php
 formatter.name: pretty
 extensions:
-    - PhpSpec\Extension\CodeCoverageExtension
+    LeanPHP\PhpSpec\CodeCoverage\CodeCoverageExtension:
+      whitelist_files:
+          - src/Polymorph/Application/Application.php
+          - src/Polymorph/Application/Object.php
+          - src/Polymorph/Config/Config.php
+          - src/Polymorph/Config/ConfigTrait.php
+      format:
+          - html
+          - clover
+      output:
+          html: dev/php-specs/reports/coverage
+          clover: dev/php-specs/reports/coverage/coverage.xml
 suites:
     default:
         src_path: src
         spec_prefix: src
-code_coverage:
-    format:
-        - html
-        - clover
-    output:
-        html: dev/php-specs/reports/coverage
-        clover: dev/php-specs/reports/coverage/coverage.xml

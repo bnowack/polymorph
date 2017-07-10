@@ -16,10 +16,10 @@
     "doctrine/dbal": "~2.2"
   },
   "require-dev": {
-    "phpspec/phpspec": "2.*",
-    "phpunit/phpunit": "4.*",
-    "ext-xdebug": "2.*",
-    "henrikbjorn/phpspec-code-coverage": "1.*"
+    "phpspec/phpspec": "^3.0",
+    "phpunit/phpunit": "^5.0",
+    "ext-xdebug": ">=2.2.1",
+    "leanphp/phpspec-code-coverage": "@stable"
   },
   "autoload": {
     "psr-4": {
