@@ -39,9 +39,9 @@
 
     <base href="{{ base }}"/>
 
-    <link rel="shortcut icon" href="{{ icons.browser }}" data-size="32x32"/>
-    <link rel="apple-touch-icon" href="{{ icons.app }}" data-size="152x152"/>
-    <link rel="manifest" href="{{ base }}manifest.json"/>
+    <link rel="shortcut icon" href="{{ icons.browser }}?{{ meta.version }}" data-size="32x32"/>
+    <link rel="apple-touch-icon" href="{{ icons.app }}?{{ meta.version }}" data-size="152x152"/>
+    <link rel="manifest" href="{{ base }}manifest.json?{{ meta.version }}"/>
 
     <title data-suffix="{{ meta.titleSuffix }}">{{ pageTitle }}{{ meta.titleSuffix }}</title>
 
@@ -101,11 +101,11 @@
     {% block imports %}
 
     <link rel="import" href="bower_components/polymer/polymer.html"/>
-    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app.html?0.3.5"/><!-- with cache-id -->
-    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-header.html?0.3.5"/><!-- with cache-id -->
-    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-canvas.html?0.3.5"/><!-- with cache-id -->
-    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-footer.html?0.3.5"/><!-- with cache-id -->
-    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-page.html?0.3.5"/><!-- with cache-id -->
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app.html?0.3.6"/><!-- with cache-id -->
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-header.html?0.3.6"/><!-- with cache-id -->
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-canvas.html?0.3.6"/><!-- with cache-id -->
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-footer.html?0.3.6"/><!-- with cache-id -->
+    <link rel="import" href="bower_components/polymorph/src/Polymorph/Application/elements/polymorph-app-page.html?0.3.6"/><!-- with cache-id -->
     <link rel="import" href="{{ sharedStylesHref }}?{{ meta.version }}"/>
 
     {% endblock %}

@@ -3,7 +3,7 @@
   "meta": {
     "name": "Polymorph Framework",
     "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "url": "https://github.com/bnowack/polymorph",
     "language": "en",
     "type" : {
@@ -74,7 +74,7 @@
     "/polymorph/account/login": {
       "call": "Polymorph\\Security\\LoginController::handleLoginRequest",
       "pageTitle": "Sign in",
-      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-login-card.html?v=0.3.5",
+      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-login-card.html?v=0.3.6",
       "elementData": {
         "cardTitle": "Sign in",
         "usernameLabel": "Email",
@@ -93,7 +93,7 @@
     "/polymorph/account/password": {
       "call": "Polymorph\\Security\\PasswordController::handlePasswordRequest",
       "pageTitle": "Change your password",
-      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-password-card.html?v=0.3.5",
+      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-password-card.html?v=0.3.6",
       "elementData": {
         "cardTitle": "Change your password",
         "oldPasswordLabel": "Current password",
