@@ -2,6 +2,7 @@
 
 namespace src\Polymorph\Config;
 
+use Polymorph\Config\Config;
 use PhpSpec\ObjectBehavior;
 use SpecHelper;
 
@@ -10,7 +11,7 @@ class ConfigSpec extends ObjectBehavior
 
     public function it_is_initializable()
     {
-        $this->shouldHaveType('Polymorph\Config\Config');
+        $this->shouldHaveType(Config::class);
     }
 
     public function it_sets_and_gets_an_option()
@@ -73,5 +74,4 @@ class ConfigSpec extends ObjectBehavior
         $this->get('object')->foo->shouldReturn('bar');// from config 1
         $this->get('object')->bar->shouldReturn('baz2');// from config 2
     }
-
 }

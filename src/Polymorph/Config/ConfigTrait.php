@@ -3,8 +3,7 @@
 namespace Polymorph\Config;
 
 /**
- * Polymorph Config trait.
- *
+ * Polymorph Config trait *
  */
 trait ConfigTrait
 {
@@ -13,6 +12,7 @@ trait ConfigTrait
      *
      * @param string $name Option name
      * @param mixed $default Default value
+     *
      * @return mixed|null Option value
      */
     public function config($name, $default = null)
@@ -30,5 +30,4 @@ trait ConfigTrait
 
         return $value;
     }
-
 }

@@ -2,30 +2,12 @@
 
 namespace Polymorph\Config;
 
+use Polymorph\Application\ServiceProvider;
 use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-use Silex\Api\BootableProviderInterface;
-
 use Silex\Application;
 
-class ConfigServiceProvider implements ServiceProviderInterface, BootableProviderInterface
+class ConfigProvider extends ServiceProvider
 {
-
-    /** @var string Provider name */
-    protected $name = null;
-
-    /** @var Application Silex app instance */
-    protected $app = null;
-
-    /**
-     * Constructor
-     *
-     * @param string $name - Name under which the provider is registered
-     */
-    public function __construct($name = 'config')
-    {
-        $this->name = $name;
-    }
 
     /**
      * Registers the service provider
@@ -46,8 +28,7 @@ class ConfigServiceProvider implements ServiceProviderInterface, BootableProvide
      */
     public function boot(Application $app)
     {
-        // save app reference
-        $this->app = $app;
+        parent::boot($app);
 
         // load configured files
         $this->loadFiles();
@@ -78,5 +59,4 @@ class ConfigServiceProvider implements ServiceProviderInterface, BootableProvide
             $config->loadFile($path, $mergeFields);
         }
     }
-
 }

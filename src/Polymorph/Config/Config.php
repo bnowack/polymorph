@@ -25,7 +25,7 @@ class Config
     /**
      * Sets a config option
      *
-     * @param str $name Option name
+     * @param string $name Option name
      * @param mixed $value Option value
      * @return Config Config instance
      */
@@ -38,7 +38,7 @@ class Config
     /**
      * Returns a config option
      *
-     * @param str $name Option name
+     * @param string $name Option name
      * @param mixed $default Default return value
      * @return mixed|null Option value (if set) or default value (if provided) or null
      */
@@ -65,6 +65,7 @@ class Config
             if ($error) {
                 throw new InvalidJsonException("Could not parse config file at '$path'");
             }
+
             foreach ($data as $name => $value) {
                 if (in_array($name, $mergeFields) && isset($this->data->$name)) {
                     $this->merge($name, $value);
@@ -73,6 +74,7 @@ class Config
                 }
             }
         }
+
         return $this;
     }
 
@@ -90,13 +92,14 @@ class Config
                 $value->$prop = $this->replacePlaceholders($propValue);
             }
         }
+
         return $value;
     }
 
     /**
      * Merges the given config option with an existing one
      *
-     * @param str $name Option name
+     * @param string $name Option name
      * @param mixed $value Option value
      */
     public function merge($name, $value)
@@ -109,7 +112,7 @@ class Config
                 $this->data->$name->$subKey = $subValue;
             }
         }
+
         return $this;
     }
-
 }

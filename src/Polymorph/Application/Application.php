@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Polymorph;
-use Polymorph\Config\ConfigServiceProvider;
 use Polymorph\Database\DatabaseServiceProvider;
 use Polymorph\Security\SecurityServiceProvider;
+use Polymorph\Config\ConfigProvider;
 use Polymorph\User\UserServiceProvider;
 use Polymorph\Schema\SchemaServiceProvider;
 
@@ -42,7 +42,7 @@ class Application extends SilexApplication
         $this->error(array($this, 'onError'));
 
         // register config service provider
-        $this->register(new ConfigServiceProvider('config'));
+        $this->register(new ConfigProvider('config'));
 
         // register twig service provider, allow loading templates from app and polymorph src directories
         $this->register(new TwigServiceProvider(), [
