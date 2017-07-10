@@ -2,56 +2,13 @@
 
 namespace Polymorph\Schema;
 
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-use Silex\Api\BootableProviderInterface;
-use Silex\Application;
+use Polymorph\Application\ServiceProvider;
+
 use FilesystemIterator;
 use Doctrine\DBAL\Exception\TableNotFoundException;
-use Polymorph\Application\Application as PolymorphApplication;
 
-class SchemaServiceProvider implements ServiceProviderInterface, BootableProviderInterface
+class SchemaProvider extends ServiceProvider
 {
-
-    /** @var string Provider name */
-    protected $name = null;
-
-    /** @var PolymorphApplication App instance */
-    protected $app = null;
-
-    /**
-     * Constructor
-     *
-     * @param string $name - Name under which the provider is registered
-     */
-    public function __construct($name = 'schema')
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Registers the service provider
-     *
-     * @param Container $app - Pimple container / Silex app
-     */
-    public function register(Container $app)
-    {
-        // register self
-        $app[$this->name] = function () {
-            return $this;
-        };
-    }
-
-    /**
-     * Boots the service provider
-     *
-     * @param Application $app - Silex application
-     */
-    public function boot(Application $app)
-    {
-        // set app reference
-        $this->app = $app;
-    }
 
     /**
      * Checks the schema for applied versions and migrates the database if needed
@@ -117,6 +74,7 @@ class SchemaServiceProvider implements ServiceProviderInterface, BootableProvide
             // migration table not created yet
             $result = [];
         }
+
         return $result;
     }
 
@@ -135,12 +93,14 @@ class SchemaServiceProvider implements ServiceProviderInterface, BootableProvide
                 if (!$file->isFile()) {
                     continue;
                 }
+
                 $className = $file->getBasename('.php');
                 $versionString = $className;
                 if (isset($versions[$versionString])) {
                     $versionPath = $versions[$versionString]['path'];
                     throw new \Exception("Schema version $className already defined at $versionPath.");
                 }
+
                 $versions[$versionString] = [
                     'path' => $file->getPathname(),
                     'className' => 'Polymorph\\Schema\\Versions\\' . $className,
@@ -148,6 +108,7 @@ class SchemaServiceProvider implements ServiceProviderInterface, BootableProvide
                 ];
             }
         }
+
         ksort($versions);// sort by version/date ascending
         return array_values($versions);
     }
@@ -181,6 +142,7 @@ class SchemaServiceProvider implements ServiceProviderInterface, BootableProvide
         if ($version->apply()) {
             return $version->applied();
         }
+
         return false;
     }
 
@@ -197,6 +159,7 @@ class SchemaServiceProvider implements ServiceProviderInterface, BootableProvide
         if ($version->revert()) {
             return $version->reverted();
         }
+
         return false;
     }
 }

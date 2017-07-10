@@ -12,8 +12,8 @@ use Polymorph;
 use Polymorph\Security\SecurityServiceProvider;
 use Polymorph\Config\ConfigProvider;
 use Polymorph\Database\DatabaseProvider;
+use Polymorph\Schema\SchemaProvider;
 use Polymorph\User\UserServiceProvider;
-use Polymorph\Schema\SchemaServiceProvider;
 
 /**
  * Polymorph Application class
@@ -57,7 +57,7 @@ class Application extends SilexApplication
         $this->register(new DatabaseProvider('db'));
 
         // register schema service provider
-        $this->register(new SchemaServiceProvider('schema'));
+        $this->register(new SchemaProvider('schema'));
 
         // register session service provider
         $this->register(new SessionServiceProvider());
