@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Polymorph;
-use Polymorph\Database\DatabaseServiceProvider;
 use Polymorph\Security\SecurityServiceProvider;
 use Polymorph\Config\ConfigProvider;
+use Polymorph\Database\DatabaseProvider;
 use Polymorph\User\UserServiceProvider;
 use Polymorph\Schema\SchemaServiceProvider;
 
@@ -54,7 +54,7 @@ class Application extends SilexApplication
         $this['twig.loader.filesystem']->addPath(POLYMORPH_SRC_DIR);
 
         // register DB service provider
-        $this->register(new DatabaseServiceProvider('db'));
+        $this->register(new DatabaseProvider('db'));
 
         // register schema service provider
         $this->register(new SchemaServiceProvider('schema'));

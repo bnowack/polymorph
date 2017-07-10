@@ -2,24 +2,16 @@
 
 namespace Polymorph\Database;
 
-use Pimple\Container;
-use Pimple\ServiceProviderInterface;
-use Silex\Api\BootableProviderInterface;
+use Polymorph\Application\ServiceProvider;
 use Silex\Application;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
-use Polymorph\Application\Application as PolymorphApplication;
 
-class DatabaseServiceProvider implements ServiceProviderInterface, BootableProviderInterface
+
+class DatabaseProvider extends ServiceProvider
 {
-
-    /** @var string Provider name */
-    protected $name = null;
-
-    /** @var PolymorphApplication Application instance */
-    protected $app = null;
 
     /** @var string Directory for sqlite databases */
     protected $directory = null;
@@ -28,37 +20,13 @@ class DatabaseServiceProvider implements ServiceProviderInterface, BootableProvi
     protected $connections = [];
 
     /**
-     * Constructor
-     *
-     * @param string $name - Name under which the provider is registered
-     */
-    public function __construct($name = 'db')
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * Registers the service provider
-     *
-     * @param Container $app - Pimple container / Silex app
-     */
-    public function register(Container $app)
-    {
-        // register self
-        $app[$this->name] = function () {
-            return $this;
-        };
-    }
-
-    /**
      * Boots the service provider
      *
      * @param Application $app - Silex application
      */
     public function boot(Application $app)
     {
-        // save app reference
-        $this->app = $app;
+        parent::boot($app);
 
         // init directory
         $this->initDirectory();
@@ -78,6 +46,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface, BootableProvi
             chmod($this->directory, 0777);
             umask($umask);
         }
+
         if (!is_dir($this->directory)) {
             throw new \Exception('Could not create `databases` directory');
         }
@@ -87,6 +56,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface, BootableProvi
      * Connects to a database
      *
      * @param string $dbName Database name as specified in the configuration
+     *
      * @return Connection Doctrine DBAL connection
      */
     public function connect($dbName)
@@ -94,6 +64,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface, BootableProvi
         if (isset($this->connections[$dbName])) {
             return $this->connections[$dbName];
         }
+
         // get options
         $options = $this->getConnectionOptions($dbName);
         // create configuration
@@ -105,6 +76,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface, BootableProvi
             touch($options['path']);
             chmod($options['path'], 0777);
         }
+
         // create and return connection
         $this->connections[$dbName] = DriverManager::getConnection($options, $config, $manager);
         return $this->connections[$dbName];
@@ -114,6 +86,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface, BootableProvi
      * Returns DB connection options and injects a database path for sqlite DBs
      *
      * @param string $dbName Database name as specified in the configuration
+     *
      * @return array Connection options
      */
     protected function getConnectionOptions($dbName)
@@ -122,6 +95,7 @@ class DatabaseServiceProvider implements ServiceProviderInterface, BootableProvi
         if ($options['driver'] === 'pdo_sqlite' && !isset($options['path'])) {
             $options['path'] = $this->directory . '/' . $dbName . '.sqlite';
         }
+
         return $options;
     }
 }
