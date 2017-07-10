@@ -9,7 +9,6 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder;
 use Polymorph\Application\Application;
 
 class UserProvider implements UserProviderInterface
@@ -53,6 +52,7 @@ class UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
+        /** @noinspection SqlResolve */
         $row = $this->conn->fetchAssoc(
             'SELECT * FROM User WHERE username = ?',
             [strtolower($username)]
@@ -110,12 +110,14 @@ class UserProvider implements UserProviderInterface
         if (is_string($user)) {
             $user = $this->loadUserByUsername($user);
         }
+
         $this->currentUser = $user;
         /** @var Session $session */
         $session = $this->app['session'];
         if ($session) {
             $session->set('user', $user->getUsername());
         }
+
         return true;
     }
 
@@ -131,6 +133,7 @@ class UserProvider implements UserProviderInterface
         if ($this->currentUser === null && $loadFromSession) {
             $this->loadUserFromSession();
         }
+
         // return user or guest user
         return $this->currentUser
             ? $this->currentUser
@@ -209,7 +212,8 @@ class UserProvider implements UserProviderInterface
         if (!$user->isEnabled() ||
             !$user->isAccountNonExpired() ||
             !$user->isAccountNonLocked() ||
-            !$user->isCredentialsNonExpired()) {
+            !$user->isCredentialsNonExpired()
+        ) {
             return false;
         }
 
@@ -224,6 +228,7 @@ class UserProvider implements UserProviderInterface
      */
     public function usernameExists($username)
     {
+        /** @noinspection SqlResolve */
         $row = $this->conn->fetchAssoc(
             'SELECT username FROM User WHERE username = ?',
             [strtolower($username)]
@@ -253,53 +258,31 @@ class UserProvider implements UserProviderInterface
     public function saveUser(User $user)
     {
         if (!$this->usernameExists($user->getUsername())) {
-            return $this->insertUser($user);
+            return $this->conn->insert('User', $this->buildTableValues($user));
         } else {
-            return $this->updateUser($user);
+            return $this->conn->update('User', $this->buildTableValues($user), [
+                'username' => strtolower($user->getUsername())
+            ]);
         }
     }
 
     /**
-     * Inserts a user into the database
+     * Builds database-friendly values
      *
      * @param User $user
-     * @return \Doctrine\DBAL\Driver\Statement|int
-     */
-    protected function insertUser(User $user)
-    {
-        return $this->conn->insert(
-            'User',
-            [
-                'username' => strtolower($user->getUsername()),
-                'password' => $user->getPassword(),
-                'roles' => join(',', $user->getRoles()),
-                'enabled' => $user->isEnabled(),
-                'expired' => !$user->isAccountNonExpired(),
-                'credentialsExpired' => !$user->isCredentialsNonExpired(),
-                'locked' => !$user->isAccountNonLocked()
-            ]
-        );
-    }
-
-    /**
-     * Updates a user entry in the database
      *
-     * @param User $user
-     * @return \Doctrine\DBAL\Driver\Statement|int
+     * @return array
      */
-    protected function updateUser(User $user)
+    protected function buildTableValues(User $user)
     {
-        return $this->conn->update(
-            'User',
-            [
-                'password' => $user->getPassword(),
-                'roles' => join(',', $user->getRoles()),
-                'enabled' => $user->isEnabled(),
-                'expired' => !$user->isAccountNonExpired(),
-                'credentialsExpired' => !$user->isCredentialsNonExpired(),
-                'locked' => !$user->isAccountNonLocked()
-            ],
-            ['username' => strtolower($user->getUsername())]
-        );
+        return [
+            'username' => strtolower($user->getUsername()),
+            'password' => $user->getPassword(),
+            'roles' => join(',', $user->getRoles()),
+            'enabled' => $user->isEnabled(),
+            'expired' => !$user->isAccountNonExpired(),
+            'credentialsExpired' => !$user->isCredentialsNonExpired(),
+            'locked' => !$user->isAccountNonLocked()
+        ];
     }
 }
