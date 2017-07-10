@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use Polymorph;
-use Polymorph\Security\SecurityServiceProvider;
 use Polymorph\Config\ConfigProvider;
 use Polymorph\Database\DatabaseProvider;
 use Polymorph\Schema\SchemaProvider;
 use Polymorph\User\UserServiceProvider;
+use Polymorph\Security\SecurityServiceProvider;
 
 /**
  * Polymorph Application class
@@ -71,13 +71,15 @@ class Application extends SilexApplication
 
     /**
      * Boots all service providers and initializes Polymorph.
+     *
+     * @param Request|null $request
      */
-    public function boot()
+    public function boot(Request $request = null)
     {
         if (!$this->booted) {
             parent::boot();
             $this->initCustomServiceProviders();
-            $this->initBase();
+            $this->initBase($request);
             $this->initRoutes();
         }
     }
@@ -103,25 +105,28 @@ class Application extends SilexApplication
         if (null === $request) {
             $request = Request::createFromGlobals();
         }
+
         $base = '/';// default
         $requestPath = $request->getPathInfo();// includes any sub-dir paths from web root
         $configuredBases = $this->config('base');
         if (!is_array($configuredBases)) {
             $configuredBases = [$configuredBases];
         }
+
         foreach ($configuredBases as $configuredBase) {
             if (strpos($requestPath, $configuredBase) === 0) {
                 $base = $configuredBase;
                 break;// break on first match
             }
         }
+
         $this->base = $base;
     }
 
     /**
      * Initializes the application routes specified in the configuration
      */
-    public function initRoutes()
+    protected function initRoutes()
     {
         $routes = $this->config('routes', array());
         foreach ($routes as $path => $routeOptions) {
@@ -133,10 +138,12 @@ class Application extends SilexApplication
                 if (empty($routeOptions->call)) {
                     $routeOptions->call = 'Polymorph\\Application\\ApplicationController::handleTemplateRequest';
                 }
+
                 // set default template
                 if (empty($routeOptions->template)) {
                     $routeOptions->template = 'Polymorph/Application/templates/content.html.twig';
                 }
+
                 /* Silex\Controller $controller */
                 $controller = $this->match($pathWithBase, $routeOptions->call);
                 // make route options available as controller call parameter

@@ -25,6 +25,7 @@
     "psr-4": {
       "Polymorph\\": "src/Polymorph",
       "spec\\Polymorph\\": "src/Polymorph",
+      "fixture\\": "dev/php-specs/fixtures",
       "Polymorph\\Schema\\Versions\\": [
         "src/Polymorph/Application/config/schema-versions"
       ]
