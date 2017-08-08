@@ -85,6 +85,7 @@ class Version
         return $this->query('schema')
             ->insert('Version')
             ->setValue('version', ':version')->setParameter('version', $this->name)
+            ->setValue('applied', ':applied')->setParameter('applied', time())
             ->execute();
     }
 

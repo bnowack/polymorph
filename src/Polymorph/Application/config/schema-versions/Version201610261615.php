@@ -40,7 +40,7 @@ class Version201610261615 extends Version
         $sql = '
           CREATE TABLE IF NOT EXISTS `Version` (
             `version` TEXT,
-            `applied` TEXT DEFAULT CURRENT_TIMESTAMP
+            `applied` INTEGER
           );
         ';
         return $this->executeSql($sql, 'schema');
