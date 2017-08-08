@@ -15,16 +15,18 @@ class DatabaseServiceProviderTraitSpec extends ObjectBehavior
 
     public function it_encodes_table_values()
     {
-        $tableDefinition = [
-            'testInt' => 'int',
-            'testString' => 'string',
-            'testTrue' => 'bool',
-            'testFalse' => 'bool',
-            'testArray' => 'array',
-            'testObject' => 'object',
-            'testTypedObject' => DatabaseServiceProviderTraitTypedObjectStub::class,
+        $tableDefinitions = [
+            'Test' => [
+                'testInt' => 'int',
+                'testString' => 'string',
+                'testTrue' => 'bool',
+                'testFalse' => 'bool',
+                'testArray' => 'array',
+                'testObject' => 'object',
+                'testTypedObject' => DatabaseServiceProviderTraitTypedObjectStub::class
+            ]
         ];
-        $this->beConstructedWith($tableDefinition);
+        $this->beConstructedWith($tableDefinitions);
 
         $instance = (object)[
             'testInt' => 10,
@@ -39,29 +41,31 @@ class DatabaseServiceProviderTraitSpec extends ObjectBehavior
                 'foo' => 'bar'
             ])
         ];
-        $this->encodeTableValues($instance)->shouldBe([
+        $this->encodeTableValues($instance, 'Test')->shouldBe([
             'testInt' => 10,
             'testString' => 'test',
             'testTrue' => 1,
             'testFalse' => 0,
             'testArray' => json_encode($instance->testArray),
             'testObject' => json_encode($instance->testObject),
-            'testTypedObject' => json_encode($instance->testTypedObject),
+            'testTypedObject' => json_encode($instance->testTypedObject)
         ]);
     }
 
     public function it_decodes_table_values()
     {
-        $tableDefinition = [
-            'testInt' => 'int',
-            'testString' => 'string',
-            'testTrue' => 'bool',
-            'testFalse' => 'bool',
-            'testArray' => 'array',
-            'testObject' => 'object',
-            'testTypedObject' => DatabaseServiceProviderTraitTypedObjectStub::class,
+        $tableDefinitions = [
+            'Test' => [
+                'testInt' => 'int',
+                'testString' => 'string',
+                'testTrue' => 'bool',
+                'testFalse' => 'bool',
+                'testArray' => 'array',
+                'testObject' => 'object',
+                'testTypedObject' => DatabaseServiceProviderTraitTypedObjectStub::class
+            ]
         ];
-        $this->beConstructedWith($tableDefinition);
+        $this->beConstructedWith($tableDefinitions);
 
         $row = [
             'testInt' => '10',
@@ -77,13 +81,13 @@ class DatabaseServiceProviderTraitSpec extends ObjectBehavior
             ])
         ];
 
-        $this->decodeTableValues($row)['testInt']->shouldBe(10);
-        $this->decodeTableValues($row)['testString']->shouldBe('test');
-        $this->decodeTableValues($row)['testTrue']->shouldBe(true);
-        $this->decodeTableValues($row)['testFalse']->shouldBe(false);
-        $this->decodeTableValues($row)['testArray']->shouldBe(['one', 'two']);
-        $this->decodeTableValues($row)['testObject']->shouldBeLike((object)['foo' => 'bar']);
-        $this->decodeTableValues($row)['testTypedObject']->shouldhaveType(
+        $this->decodeTableValues($row, 'Test')['testInt']->shouldBe(10);
+        $this->decodeTableValues($row, 'Test')['testString']->shouldBe('test');
+        $this->decodeTableValues($row, 'Test')['testTrue']->shouldBe(true);
+        $this->decodeTableValues($row, 'Test')['testFalse']->shouldBe(false);
+        $this->decodeTableValues($row, 'Test')['testArray']->shouldBe(['one', 'two']);
+        $this->decodeTableValues($row, 'Test')['testObject']->shouldBeLike((object)['foo' => 'bar']);
+        $this->decodeTableValues($row, 'Test')['testTypedObject']->shouldhaveType(
             DatabaseServiceProviderTraitTypedObjectStub::class
         );
     }
@@ -93,9 +97,9 @@ class DatabaseServiceProviderTraitStub {
 
     use DatabaseServiceProviderTrait;
 
-    public function __construct($tableDefinition)
+    public function __construct($tableDefinitions)
     {
-        $this->tableDefinition = $tableDefinition;
+        $this->tableDefinitions = $tableDefinitions;
     }
 }
 

@@ -1,37 +1,68 @@
 <?php
 
 namespace Polymorph\Database;
+use Doctrine\DBAL\Connection;
 
 /**
  * Polymorph database service provider trait
  *
  * Extends service providers with database-specific features
  *
- * @property array $tableDefinition Must be defined in concrete provider
+ * @property array $tableDefinitions
  */
 trait DatabaseServiceProviderTrait
 {
+
+    /** @var Connection */
+    protected $connection;
+
     /**
-     * Returns the table definition, e.g. for schema diffs
+     * Returns the table definitions, e.g. for schema diffs
      *
      * @return array
      */
-    public function getTableDefinition()
+    public function getTableDefinitions()
     {
-        return $this->tableDefinition;
+        return $this->tableDefinitions;
+    }
+
+    /**
+     * Returns a table definition
+     *
+     * @return array
+     */
+    public function getTableDefinition($tableName)
+    {
+        return $this->tableDefinitions[$tableName];
+    }
+
+    /**
+     * Returns a database connection
+     *
+     * @return Connection
+     */
+    public function getConnection($databaseName)
+    {
+        if (!$this->connection) {
+            $this->connection = $this->app['db']->connect($databaseName);
+        }
+
+        return $this->connection;
     }
 
     /**
      * Builds database table values from an instance and the table definition
      *
      * @param object $instance
+     * @param string $tableName
      *
      * @return array
      */
-    public function encodeTableValues($instance)
+    public function encodeTableValues($instance, $tableName)
     {
         $values = [];
-        array_walk($this->tableDefinition, function ($type, $column) use ($instance, &$values) {
+        $tableDefinition = $this->getTableDefinition($tableName);
+        array_walk($tableDefinition, function ($type, $column) use ($instance, &$values) {
             $values[$column] = $this->encodeTableValue($instance, $column, $type);
         });
         return $values;
@@ -77,13 +108,15 @@ trait DatabaseServiceProviderTrait
      * Parses database table values to object property values
      *
      * @param array $row
+     * @param string $tableName
      *
      * @return array
      */
-    public function decodeTableValues($row)
+    public function decodeTableValues($row, $tableName)
     {
         $values = [];
-        array_walk($this->tableDefinition, function ($type, $column) use ($row, &$values) {
+        $tableDefinition = $this->getTableDefinition($tableName);
+        array_walk($tableDefinition, function ($type, $column) use ($row, &$values) {
             $values[$column] = $this->decodeTableValue($row, $column, $type);
         });
         return $values;
