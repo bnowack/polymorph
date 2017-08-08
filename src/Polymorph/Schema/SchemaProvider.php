@@ -3,12 +3,77 @@
 namespace Polymorph\Schema;
 
 use Polymorph\Application\ServiceProvider;
+use Polymorph\Database\DatabaseServiceProviderTrait;
+use Exception;
 
 use FilesystemIterator;
 use Doctrine\DBAL\Exception\TableNotFoundException;
 
 class SchemaProvider extends ServiceProvider
 {
+
+    use DatabaseServiceProviderTrait;
+
+    protected $tableDefinitions = [
+        'Version' => [
+            'version' => 'string',
+            'applied' => 'int'
+        ],
+        'QuickCheck' => [
+            'hash' => 'string',
+            'checked' => 'int'
+        ]
+    ];
+
+    /**
+     * Does an efficient check for schema changes, w/o loading all version files
+     *
+     * @param ServiceProvider[] $providers
+     */
+    public function quickCheckSchema($providers)
+    {
+        try {
+            $row = $this->getConnection('schema')->fetchAssoc('SELECT * FROM QuickCheck');
+        } catch (Exception $exception) {
+            // QuickCheck table does not exist yet, create it
+            $this->checkSchema();
+            $row = null;
+        }
+
+        // don't check more often than once per minute
+        if ($row && $row['checked'] > time() - 60) {
+            return;
+        }
+
+        // calculate schema hash
+        $schema = [];
+        foreach ($providers as $provider) {
+            if (method_exists($provider, 'getTableDefinitions')) {
+                $schema[get_class($provider)] = $provider->getTableDefinitions();
+            }
+        }
+
+        $schemaHash = md5(json_encode($schema));
+
+        // stop if schema did not change
+        if ($row && $schemaHash === $row['hash']) {
+            return;
+        }
+
+        // apply latest Version files
+        $this->checkSchema();
+
+        // save schema hash
+        $values = [
+            'hash' => $schemaHash,
+            'checked' => time()
+        ];
+        if ($row) {
+            $this->getConnection('schema')->update('QuickCheck', $values, ['rowid' => 1]);
+        } else {
+            $this->getConnection('schema')->insert('QuickCheck', $values);
+        }
+    }
 
     /**
      * Checks the schema for applied versions and migrates the database if needed

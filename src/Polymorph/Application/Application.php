@@ -80,6 +80,7 @@ class Application extends SilexApplication
             $this->initCustomServiceProviders();
             $this->initBase($request);
             $this->initRoutes();
+            $this['schema']->quickCheckSchema($this->providers);
         }
     }
 
