@@ -3,6 +3,7 @@
 namespace Polymorph\User;
 
 use Polymorph\Application\ServiceProvider;
+use Polymorph\Database\DatabaseServiceProviderTrait;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,7 +13,19 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class UserProvider extends ServiceProvider implements UserProviderInterface
 {
+    use DatabaseServiceProviderTrait;
 
+    protected $tableDefinitions = [
+        'User' => [
+            'username' => 'string',
+            'password' => 'string',
+            'roles' => 'array',
+            'enabled' => 'bool',
+            'expired' => 'bool',
+            'credentialsExpired' => 'bool',
+            'locked' => 'bool'
+        ]
+    ];
 
     /** @var User */
     protected $currentUser = null;
