@@ -64,9 +64,6 @@ class Application extends SilexApplication
         // register session service provider
         $this->register(new SessionServiceProvider());
 
-        // register user service provider
-        $this->register(new UserServiceProvider('users'));
-
         // register security service provider
         $this->register(new SecurityServiceProvider('security'));
     }

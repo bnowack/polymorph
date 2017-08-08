@@ -36,6 +36,9 @@
   "startupBgColor": "#fff",
   "sharedStylesHref": "bower_components/polymorph/src/Polymorph/Application/elements/shared-styles.html",
   "dataDirectory": "data",
+  "serviceProviders": {
+    "users": "Polymorph\\User\\UserProvider"
+  },
   "dbs": {
     "schema": { "driver": "pdo_sqlite" },
     "users": { "driver": "pdo_sqlite" }

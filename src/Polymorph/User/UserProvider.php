@@ -2,37 +2,20 @@
 
 namespace Polymorph\User;
 
+use Polymorph\Application\ServiceProvider;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Doctrine\DBAL\Connection;
-use Polymorph\Application\Application;
 
-class UserProvider implements UserProviderInterface
+class UserProvider extends ServiceProvider implements UserProviderInterface
 {
-    /** @var Application */
-    protected $app;
 
-    /** @var Connection */
-    protected $conn;
 
     /** @var User */
-    protected $currentUser;
-
-    /**
-     * UserProvider constructor
-     *
-     * @param Application $app Application instance
-     */
-    public function __construct(Application $app)
-    {
-        $this->app = $app;
-        $this->conn = $app['db']->connect('users');
-        $this->currentUser = null;
-    }
+    protected $currentUser = null;
 
     /**
      * Creates a password encoder
@@ -53,7 +36,7 @@ class UserProvider implements UserProviderInterface
     public function loadUserByUsername($username)
     {
         /** @noinspection SqlResolve */
-        $row = $this->conn->fetchAssoc(
+        $row = $this->getConnection('users')->fetchAssoc(
             'SELECT * FROM User WHERE username = ?',
             [strtolower($username)]
         );
@@ -96,7 +79,7 @@ class UserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return $class === 'Polymorph\User\User';
+        return $class === User::class;
     }
 
     /**
@@ -229,7 +212,7 @@ class UserProvider implements UserProviderInterface
     public function usernameExists($username)
     {
         /** @noinspection SqlResolve */
-        $row = $this->conn->fetchAssoc(
+        $row = $this->getConnection('users')->fetchAssoc(
             'SELECT username FROM User WHERE username = ?',
             [strtolower($username)]
         );
@@ -244,7 +227,7 @@ class UserProvider implements UserProviderInterface
      */
     public function deleteUser(User $user)
     {
-        return $this->conn->delete(
+        return $this->getConnection('users')->delete(
             'User',
             ['username' => $user->getUsername()]
         );
@@ -253,14 +236,15 @@ class UserProvider implements UserProviderInterface
     /**
      * Inserts or replaces a user in the database
      * @param User $user
-     * @return \Doctrine\DBAL\Driver\Statement|int
+     *
+     * @return int
      */
     public function saveUser(User $user)
     {
         if (!$this->usernameExists($user->getUsername())) {
-            return $this->conn->insert('User', $this->buildTableValues($user));
+            return $this->getConnection('users')->insert('User', $this->buildTableValues($user));
         } else {
-            return $this->conn->update('User', $this->buildTableValues($user), [
+            return $this->getConnection('users')->update('User', $this->buildTableValues($user), [
                 'username' => strtolower($user->getUsername())
             ]);
         }
