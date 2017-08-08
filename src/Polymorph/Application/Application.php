@@ -7,6 +7,7 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Silex\Application\TwigTrait;
 
 use Polymorph;
 use Polymorph\Config\ConfigProvider;
@@ -14,6 +15,7 @@ use Polymorph\Database\DatabaseProvider;
 use Polymorph\Schema\SchemaProvider;
 use Polymorph\User\UserServiceProvider;
 use Polymorph\Security\SecurityServiceProvider;
+use Polymorph\Config\ConfigTrait;
 
 /**
  * Polymorph Application class
@@ -21,10 +23,10 @@ use Polymorph\Security\SecurityServiceProvider;
  */
 class Application extends SilexApplication
 {
-    use SilexApplication\TwigTrait {
+    use TwigTrait {
         render as twigRender;
     }
-    use Polymorph\Config\ConfigTrait;
+    use ConfigTrait;
 
     /** @var string Application base path (with trailing slash) */
     public $base = null;
@@ -215,6 +217,7 @@ class Application extends SilexApplication
                 $combinedParameters[$name] = $value;
             }
         }
+
         return $combinedParameters;
     }
 
@@ -258,6 +261,7 @@ class Application extends SilexApplication
         if (null === $request) {
             $request = $this['request_stack']->getCurrentRequest();
         }
+
         return ($request->query->get('partials') === 'true');
     }
 }
