@@ -39,6 +39,8 @@
                 // add forEach method to NodeLists and HTMLCollections (lacks in PhantomJS)
                 NodeList.prototype.forEach = Array.prototype.forEach;
                 HTMLCollection.prototype.forEach = Array.prototype.forEach;
+                // track clicks
+                this.listen(this, 'click', 'onClick');
             },
 
             properties: {
@@ -57,6 +59,31 @@
                 'onRouteChanged(routeData)',    // trigger onRouteChanged when routeData changes
                 'onRouteChanged(tailData)'      // trigger onRouteChanged when tailData changes
             ],
+
+            /**
+             * Prevents route interception on links with a "_top" target, e.g. for download-links
+             */
+            onClick: function (event) {
+                var eventPath = Polymer.dom(event).path;
+                var anchor = null;
+                for (var i = 0; i < eventPath.length; i++) {
+                    var element = eventPath[i];
+                    if (element.tagName === 'A' && element.href) {
+                        anchor = element;
+                        break;
+                    }
+                }
+
+                if (!anchor) {
+                    return null;
+                }
+
+                // don't intercept links with `_top` or `_parent` target, but open them in main window
+                if (anchor.target.match(/^_(top|parent)$/)) {
+                    event.preventDefault();
+                    location.href = anchor.href;
+                }
+            },
 
             /**
              * Sets the element's `view` parameter when the route changes
