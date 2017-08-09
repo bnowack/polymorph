@@ -7,6 +7,13 @@ extensions:
           - src/Polymorph/Application/Object.php
           - src/Polymorph/Config/Config.php
           - src/Polymorph/Config/ConfigTrait.php
+          - src/Polymorph/Config/ConfigProvider.php
+          - src/Polymorph/Database/DatabaseProvider.php
+          - src/Polymorph/Database/DatabaseServiceProviderTrait.php
+          - src/Polymorph/Schema/SchemaProvider.php
+          - src/Polymorph/Schema/Version.php
+          - src/Polymorph/User/User.php
+          - src/Polymorph/User/UserProvider.php
       format:
           - html
           - clover
