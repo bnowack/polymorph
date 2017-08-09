@@ -8,7 +8,7 @@ use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
-
+use Exception;
 
 class DatabaseProvider extends ServiceProvider
 {
@@ -88,10 +88,16 @@ class DatabaseProvider extends ServiceProvider
      * @param string $dbName Database name as specified in the configuration
      *
      * @return array Connection options
+     * @throws Exception When the database is not configured
      */
     protected function getConnectionOptions($dbName)
     {
-        $options = (array)$this->app->config('dbs')->$dbName;
+        $dbConfig = $this->app->config('dbs');
+        if (!isset($dbConfig->$dbName)) {
+            throw new Exception("Database '$dbName' is not configured");
+        }
+        
+        $options = (array)$dbConfig->$dbName;
         if ($options['driver'] === 'pdo_sqlite' && !isset($options['path'])) {
             $options['path'] = $this->directory . '/' . $dbName . '.sqlite';
         }
