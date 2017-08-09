@@ -55,13 +55,10 @@ class SchemaProvider extends ServiceProvider
 
         $schemaHash = md5(json_encode($schema));
 
-        // stop if schema did not change
-        if ($row && $schemaHash === $row['hash']) {
-            return;
+        // full check if schema changed
+        if (!$row || $schemaHash !== $row['hash']) {
+            $this->checkSchema();
         }
-
-        // apply latest Version files
-        $this->checkSchema();
 
         // save schema hash
         $values = [
