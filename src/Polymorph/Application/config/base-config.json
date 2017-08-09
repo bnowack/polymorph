@@ -44,6 +44,7 @@
     "schema": { "driver": "pdo_sqlite" },
     "users": { "driver": "pdo_sqlite" }
   },
+  "autoCheckSchema": true,
   "adminAccount": "",
   "routes": {
 
