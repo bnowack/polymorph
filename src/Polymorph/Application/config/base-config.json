@@ -3,8 +3,8 @@
   "meta": {
     "name": "Polymorph Framework",
     "description": "A PHP micro-framework for creating Polymer applications that are both browser- and bot-friendly",
-    "version": "0.4.0",
-    "polymorphVersion": "0.4.0",
+    "version": "0.4.1",
+    "polymorphVersion": "0.4.1",
     "url": "https://github.com/bnowack/polymorph",
     "language": "en",
     "type" : {
