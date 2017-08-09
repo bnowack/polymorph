@@ -26,12 +26,15 @@
             return new Promise(function (resolve, reject) {
                 var queueSize = elements.length;
                 elements.forEach(function (path) {
+                    var url = self.resolveUrl(path);
                     // append cache id
-                    if (!path.match(/\?/)) {
-                        path += '?' + window.Polymorph.appVersion;
+                    if (!url.match(/\?/) && url.match(/polymorph/)) {
+                        url += '?' + window.Polymorph.polymorphVersion;
+                    } else if (!url.match(/\?/)) {
+                        url += '?' + window.Polymorph.appVersion;
                     }
                     var elementName = path.replace(/^.*\/([^\/]+)\.html.*$/, '$1');
-                    self.importHref(self.resolveUrl(path), function () {
+                    self.importHref(url, function () {
                         queueSize--;
                         self.lazyloaded[elementName] = true;
                         if (queueSize === 0) {

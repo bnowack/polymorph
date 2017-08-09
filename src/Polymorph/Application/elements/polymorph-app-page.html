@@ -76,7 +76,14 @@
              */
             checkElement: function () {
                 if (this.element) {
-                    this.importHref(this.element, this.appendElement);
+                    var url = this.element;
+                    // append cache id
+                    if (!url.match(/\?/) && url.match(/polymorph/)) {
+                        url += '?' + window.Polymorph.polymorphVersion;
+                    } else if (!url.match(/\?/)) {
+                        url += '?' + window.Polymorph.appVersion;
+                    }
+                    this.importHref(url, this.appendElement);
                 }
             },
 

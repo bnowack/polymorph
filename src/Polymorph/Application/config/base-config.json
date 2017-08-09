@@ -78,7 +78,7 @@
     "/polymorph/account/login": {
       "call": "Polymorph\\Security\\LoginController::handleLoginRequest",
       "pageTitle": "Sign in",
-      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-login-card.html?v=0.4.0",
+      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-login-card.html",
       "elementData": {
         "cardTitle": "Sign in",
         "usernameLabel": "Email",
@@ -97,7 +97,7 @@
     "/polymorph/account/password": {
       "call": "Polymorph\\Security\\PasswordController::handlePasswordRequest",
       "pageTitle": "Change your password",
-      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-password-card.html?v=0.4.0",
+      "element": "bower_components/polymorph/src/Polymorph/Security/elements/polymorph-password-card.html",
       "elementData": {
         "cardTitle": "Change your password",
         "oldPasswordLabel": "Current password",
